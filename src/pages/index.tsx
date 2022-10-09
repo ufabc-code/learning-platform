@@ -1,11 +1,10 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { trpc } from "../utils/trpc";
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import { trpc } from '../utils/trpc'
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
-
+  const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }])
   return (
     <>
       <Head>
@@ -57,15 +56,15 @@ const Home: NextPage = () => {
         <AuthShowcase />
       </main>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
 
 const AuthShowcase: React.FC = () => {
-  const { data: secretMessage } = trpc.useQuery(["auth.getSecretMessage"]);
+  const { data: secretMessage } = trpc.useQuery(['auth.getSecretMessage'])
 
-  const { data: sessionData } = useSession();
+  const { data: sessionData } = useSession()
 
   return (
     <div className="flex flex-col items-center justify-center gap-2">
@@ -81,22 +80,22 @@ const AuthShowcase: React.FC = () => {
         className="rounded-md border border-black bg-violet-50 px-4 py-2 text-xl shadow-lg hover:bg-violet-100"
         onClick={sessionData ? () => signOut() : () => signIn()}
       >
-        {sessionData ? "Sign out" : "Sign in"}
+        {sessionData ? 'Sign out' : 'Sign in'}
       </button>
     </div>
-  );
-};
+  )
+}
 
 type TechnologyCardProps = {
-  name: string;
-  description: string;
-  documentation: string;
-};
+  name: string
+  description: string
+  documentation: string
+}
 
 const TechnologyCard = ({
   name,
   description,
-  documentation,
+  documentation
 }: TechnologyCardProps) => {
   return (
     <section className="flex flex-col justify-center rounded border-2 border-gray-500 p-6 shadow-xl duration-500 motion-safe:hover:scale-105">
@@ -111,5 +110,5 @@ const TechnologyCard = ({
         Documentation
       </a>
     </section>
-  );
-};
+  )
+}
