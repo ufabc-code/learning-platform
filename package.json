@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "commit": "git-cz"
   },
   "dependencies": {
     "@trpc/client": "^9.27.4",
@@ -32,6 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "autoprefixer": "^10.4.12",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.22.0",
     "eslint-config-next": "12.3.1",
     "husky": "^8.0.1",
@@ -43,5 +45,10 @@
   },
   "ct3aMetadata": {
     "initVersion": "5.15.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

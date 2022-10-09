@@ -1,3 +1,5 @@
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 # Instruções
 
 Para rodar o projeto, clone este repositório, e acesse a pasta learning-platform
