@@ -4,6 +4,5 @@ import GetCourseService from './getCourseService'
 
 export const getCourseFactory = () => {
   const { courseRepository } = container()
-  const getCourseService = new GetCourseService(courseRepository)
-  return new GetCourseController(getCourseService)
+  return new GetCourseService(courseRepository)
 }

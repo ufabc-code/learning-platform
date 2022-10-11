@@ -4,7 +4,5 @@ import UpdateCourseService from './updateCourseService'
 
 export const updateCourseFactory = () => {
   const { courseRepository } = container()
-  const updateCourse = new UpdateCourseService(courseRepository)
-  const updateCourseController = new UpdateCourseController(updateCourse)
-  return updateCourseController
+  return new UpdateCourseService(courseRepository)
 }
