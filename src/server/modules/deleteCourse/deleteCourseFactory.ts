@@ -1,5 +1,4 @@
 import { container } from '../../container'
-import DeleteCourseController from './deleteCourseController'
 import DeleteCourseService from './deleteCourseService'
 
 export const deleteCourseFactory = () => {

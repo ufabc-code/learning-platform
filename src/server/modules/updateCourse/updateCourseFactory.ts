@@ -1,5 +1,4 @@
 import { container } from '../../container'
-import UpdateCourseController from './updateCourseController'
 import UpdateCourseService from './updateCourseService'
 
 export const updateCourseFactory = () => {

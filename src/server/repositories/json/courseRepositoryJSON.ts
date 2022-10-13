@@ -24,7 +24,7 @@ class CourseRepositoryJSON implements ICourseRepository {
   }
 
   async findById(id: string): Promise<Course | null> {
-    let courses = this.getCoursesFromFile()
+    const courses = this.getCoursesFromFile()
     const course = courses.find(({ id: courseId }) => courseId === id)
     return course || null
   }
