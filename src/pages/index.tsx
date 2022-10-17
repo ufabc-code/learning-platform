@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import Link from 'next/link'
 import { QueryClient } from 'react-query'
 import { trpc, client } from 'utils/trpc'
 
@@ -33,6 +34,14 @@ const AppContent = () => {
           Create course
         </button>
       </div>
+      { 
+      coursesQuery.data?.map(course => (
+        <a href={`/cursos/${course.id}`}>
+          { JSON.stringify(course.id, null, 2)}
+        </a>
+      ))
+       
+      }
     </div>
   )
 }
