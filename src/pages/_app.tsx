@@ -8,15 +8,24 @@ import type { AppType } from 'next/app'
 import type { AppRouter } from '../server/router'
 import type { Session } from 'next-auth'
 import '../styles/globals.css'
+import { trpc, client } from 'utils/trpc'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps }
 }) => {
+  const trpcClient = trpc.createClient({
+    url: '/api/trpc'
+  })
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
+    <trpc.Provider client={trpcClient} queryClient={client}>
+      <QueryClientProvider client={client}>
+        <SessionProvider session={session}>
+          <Component {...pageProps} />
+        </SessionProvider>
+      </QueryClientProvider>
+    </trpc.Provider>
   )
 }
 

@@ -2,8 +2,6 @@ import type { NextPage } from 'next'
 import { QueryClient } from 'react-query'
 import { trpc, client } from 'utils/trpc'
 
-
-
 const AppContent = () => {
   const coursesQuery = trpc.useQuery(['courses.getAll'])
   const createCourse = trpc.useMutation('courses.create')
