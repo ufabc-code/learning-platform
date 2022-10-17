@@ -39,11 +39,9 @@ const AppContent = () => {
 }
 
 const Home: NextPage = () => {
-  const [trpcClient] = useState(() =>
-    trpc.createClient({
-      url: 'http://localhost:3000/api/trpc'
-    })
-  )
+  const trpcClient = trpc.createClient({
+    url: '/api/trpc'
+  })
 
   return (
     <trpc.Provider client={trpcClient} queryClient={client}>
