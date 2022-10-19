@@ -1,15 +1,15 @@
 import Lesson from './lesson'
 
 class QuizLesson extends Lesson {
-  id: string
-  type: 'code' | 'quiz'
+  public id: string
+  public type: 'code' | 'quiz'
   public text: string
   public alternatives: Array<{
     text: string
   }> = []
   public solution: {
     text: string
-    correct: []
+    correct: number[]
   }
 
   constructor({ id, text, alternatives, solution }: QuizLesson) {

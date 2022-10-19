@@ -24,7 +24,7 @@ export const QuizLessonSchema = z.object({
   ),
   solution: z.object({
     text: z.string(),
-    correct: z.array(z.string())
+    correct: z.array(z.number())
   })
 })
 

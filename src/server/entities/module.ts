@@ -5,7 +5,7 @@ class Module {
   public id: string
   public title: string
   public description: string
-  public lessons: (QuizLesson | CodeLesson)[]
+  public lessons: (CodeLesson | QuizLesson)[]
 
   constructor({ id, title, description, lessons }: Module) {
     this.id = id
