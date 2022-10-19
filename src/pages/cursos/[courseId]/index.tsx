@@ -10,6 +10,7 @@ function Courses() {
   const { courseId } = router.query
 
   const courseQuery = trpc.useQuery(['courses.get', { id: courseId as string }])
+  // const courseQuery2 = trpc.useQuery(['courses.getAll'])
   const courseUpdate = trpc.useMutation('courses.update')
   const deleteCourse = trpc.useMutation('courses.delete')
   const [course, setCourse] = useState<Course | null>(null)
@@ -18,6 +19,7 @@ function Courses() {
     if (courseQuery.data) {
       setCourse(courseQuery.data)
     }
+    // if(courseQuery2.data)
   }, [courseQuery.data])
 
   if (!course) return null
