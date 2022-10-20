@@ -1,4 +1,5 @@
 import QuizLesson from 'server/entities/quizLesson'
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid'
 
 interface QuizLessonEditorProps {
   quizLesson: QuizLesson
@@ -37,7 +38,7 @@ export function QuizLessonEditor({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 border-2 border-red-500">
+    <div className="grid grid-cols-1 gap-4">
       <div>
         <label
           htmlFor="text"
@@ -77,22 +78,21 @@ export function QuizLessonEditor({
         />
       </div>
 
-      <div>
-        <button className="bg-red-500 p-4" onClick={handleAddAlternative}>
-          Add
+      <div className="text-right">
+        <button
+          className="rounded-lg border border-gray-200 bg-white py-2.5 px-5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700"
+          onClick={handleAddAlternative}
+        >
+          <PlusIcon className="h-5 w-5" />
         </button>
       </div>
 
-      <div>
+      <div className="grid grid-cols-1 gap-4">
         {quizLesson.alternatives.map((alternative, index) => (
-          <div
-            key={index}
-            className="mb-4 flex items-center border-2 border-blue-500"
-          >
+          <div key={index} className="flex items-center rounded-md border p-2">
             <input
-              id="default-checkbox"
               type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
+              className="h-6 w-6 rounded border-gray-300 bg-gray-100 text-blue-600"
               checked={quizLesson.solution.correct.includes(index)}
               onChange={(e) => {
                 if (e.target.checked) {
@@ -112,16 +112,14 @@ export function QuizLessonEditor({
             />
 
             <button
-              className="bg-red-500 p-4"
+              className="p-4"
               onClick={() => handleRemoveAlternative(index)}
             >
-              Remover
+              <XMarkIcon className="h-8 w-8 text-red-500" />
             </button>
           </div>
         ))}
       </div>
-
-      <pre>{JSON.stringify(quizLesson, null, 2)}</pre>
     </div>
   )
 }

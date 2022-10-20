@@ -187,12 +187,14 @@ function EditModule() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
+      <div className="mt-8 grid grid-cols-1 gap-4">
         {module.lessons.map((lesson, index) => (
           <LessonEditor
+            setModule={setModule}
             updateLesson={updateLesson}
             key={index}
             lesson={lesson}
+            module={module}
           />
         ))}
       </div>
