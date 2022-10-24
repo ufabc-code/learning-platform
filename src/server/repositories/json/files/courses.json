@@ -1,1 +1,67 @@
-[{"id":"52b2c425-49dd-4e8b-b1e7-b35fe257a01b","title":"","description":"","modules":[],"slug":""},{"id":"35ca6eaf-c199-4801-98f8-21adc6bcb703","title":"","description":"","modules":[{"id":"0.6657648402572394","title":"title","description":"","lessons":[{"id":"0.42971724449868876","type":"quiz","text":"e1","alternatives":[{"text":"nova alternativa"}],"solution":{"text":"","correct":[]}},{"id":"0.98553819694594","type":"code","solution":{"text":"confia","code":"print()","language":"python"},"template":{"code":"x = input()","language":"python"},"tests":[{"input":"1","expected":"2"}],"text":"string"}]},{"id":"0.8791580149224207","title":"","description":"","lessons":[]},{"id":"0.31445686355774405","title":"","description":"","lessons":[]},{"id":"0.5309249416362425","title":"","description":"","lessons":[]},{"id":"0.31120402378787215","title":"","description":"","lessons":[]}],"slug":""}]
+[
+  {
+    "id": "52b2c425-49dd-4e8b-b1e7-b35fe257a01b",
+    "title": "",
+    "description": "",
+    "modules": [],
+    "slug": ""
+  },
+  {
+    "id": "35ca6eaf-c199-4801-98f8-21adc6bcb703",
+    "title": "",
+    "description": "",
+    "modules": [
+      {
+        "id": "0.6657648402572394",
+        "title": "title",
+        "description": "",
+        "lessons": [
+          {
+            "id": "0.42971724449868876",
+            "type": "quiz",
+            "text": "e1",
+            "alternatives": [{ "text": "nova alternativa" }],
+            "solution": { "text": "", "correct": [] }
+          },
+          {
+            "id": "0.98553819694594",
+            "type": "code",
+            "solution": {
+              "text": "confia",
+              "code": "print()",
+              "language": "python"
+            },
+            "template": { "code": "x = input()", "language": "python" },
+            "tests": [{ "input": "1", "expected": "2" }],
+            "text": "string"
+          }
+        ]
+      },
+      {
+        "id": "0.8791580149224207",
+        "title": "",
+        "description": "",
+        "lessons": []
+      },
+      {
+        "id": "0.31445686355774405",
+        "title": "",
+        "description": "",
+        "lessons": []
+      },
+      {
+        "id": "0.5309249416362425",
+        "title": "",
+        "description": "",
+        "lessons": []
+      },
+      {
+        "id": "0.31120402378787215",
+        "title": "",
+        "description": "",
+        "lessons": []
+      }
+    ],
+    "slug": ""
+  }
+]
