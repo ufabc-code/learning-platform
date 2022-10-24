@@ -1,3 +1,9 @@
+import {
+  CodeBracketIcon,
+  DocumentCheckIcon,
+  QuestionMarkCircleIcon,
+  TrashIcon
+} from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import CodeLesson from 'server/entities/codeLesson'
@@ -131,22 +137,24 @@ function EditModule() {
   if (!course || !module) return null
 
   return (
-    <div>
-      <div>
-        <button onClick={handleDeleteModule} className="m-4 bg-red-500 p-4">
-          deletar módulo
-        </button>
-        <button onClick={handleUpdateModule} className="m-4 bg-red-500 p-4">
-          atualizar módulo
-        </button>
-        <button className="m-4 bg-red-500 p-4" onClick={handleCreateCodeLesson}>
-          criar aula de código
-        </button>
-        <button className="m-4 bg-red-500 p-4" onClick={handleCreateQuizLesson}>
-          criar aula de quiz
-        </button>
+    <div className="p-8">
+      <div className="mb-8 flex justify-between">
+        <h1 className="my-auto flex text-5xl font-semibold">Editar Módulo</h1>
+        <div>
+          <button
+            onClick={handleDeleteModule}
+            className="mr-4 rounded-lg p-2 text-red-600 hover:bg-red-100"
+          >
+            <TrashIcon className="h-10 w-10" />
+          </button>
+          <button
+            onClick={handleUpdateModule}
+            className="rounded-lg p-2 text-green-600 hover:bg-green-100"
+          >
+            <DocumentCheckIcon className="h-10 w-10" />
+          </button>
+        </div>
       </div>
-
       <div className="grid grid-cols-1 gap-4">
         <div>
           <label
@@ -187,7 +195,24 @@ function EditModule() {
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-4">
+      <div className="mt-12 grid grid-cols-1 gap-4">
+        <div className="flex justify-between">
+          <h3 className="my-auto flex text-3xl font-semibold">Exercícios</h3>
+          <div>
+            <button
+              className="mr-4 rounded-lg bg-purple-100/70 py-2 px-4 text-purple-600 hover:bg-purple-200/80"
+              onClick={handleCreateQuizLesson}
+            >
+              <QuestionMarkCircleIcon className="h-6 w-6 font-medium" />
+            </button>
+            <button
+              className="rounded-lg bg-sky-100/70 py-2 px-4 text-sky-600 hover:bg-sky-200/80"
+              onClick={handleCreateCodeLesson}
+            >
+              <CodeBracketIcon className="h-6 w-6 font-medium" />
+            </button>
+          </div>
+        </div>
         {module.lessons.map((lesson, index) => (
           <LessonEditor
             setModule={setModule}
