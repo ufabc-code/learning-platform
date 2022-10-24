@@ -10,6 +10,7 @@ import type { Session } from 'next-auth'
 import '../styles/globals.css'
 import { trpc, client } from 'utils/trpc'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ToastProvider, ToastSection } from 'components/toast'
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -19,13 +20,16 @@ const MyApp: AppType<{ session: Session | null }> = ({
     url: '/api/trpc'
   })
   return (
-    <trpc.Provider client={trpcClient} queryClient={client}>
-      <QueryClientProvider client={client}>
-        <SessionProvider session={session}>
-          <Component {...pageProps} />
-        </SessionProvider>
-      </QueryClientProvider>
-    </trpc.Provider>
+    <ToastProvider>
+      <ToastSection />
+      <trpc.Provider client={trpcClient} queryClient={client}>
+        <QueryClientProvider client={client}>
+          <SessionProvider session={session}>
+            <Component {...pageProps} />
+          </SessionProvider>
+        </QueryClientProvider>
+      </trpc.Provider>
+    </ToastProvider>
   )
 }
 
