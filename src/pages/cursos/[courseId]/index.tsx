@@ -1,3 +1,8 @@
+import {
+  DocumentCheckIcon,
+  PlusCircleIcon,
+  TrashIcon
+} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -84,20 +89,23 @@ function Courses() {
   }
 
   return (
-    <div>
-      {JSON.stringify(course, null, 2)}
-      <div>
-        <button className="m-4 bg-red-500 p-4" onClick={handleUpdateCourse}>
-          Salvar
-        </button>
-
-        <button className="m-4 bg-red-500 p-4" onClick={handleCreateModule}>
-          Novo modulo
-        </button>
-
-        <button className="m-4 bg-red-500 p-4" onClick={handleDeleteCourse}>
-          Deletar curso
-        </button>
+    <div className="p-8">
+      <div className="mb-8 flex justify-between">
+        <h1 className="my-auto flex text-5xl font-semibold">Editar Curso</h1>
+        <div>
+          <button
+            className="mr-4 rounded-lg p-2 text-red-600 hover:bg-red-100"
+            onClick={handleDeleteCourse}
+          >
+            <TrashIcon className="h-10 w-10" />
+          </button>
+          <button
+            className="rounded-lg p-2 text-green-600 hover:bg-green-100"
+            onClick={handleUpdateCourse}
+          >
+            <DocumentCheckIcon className="h-10 w-10" />
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
@@ -158,12 +166,24 @@ function Courses() {
         </div>
       </div>
 
-      <div>
-        <h1>Modulos</h1>
-        <div className="grid grid-cols-1 gap-4">
-          {course.modules.map(({ id }) => (
+      <div className="mt-12">
+        <div className="flex justify-between">
+          <h3 className="my-auto flex text-3xl font-semibold">Módulos</h3>
+          <button
+            className="rounded-full p-1 text-blue-600 hover:bg-blue-100"
+            onClick={handleCreateModule}
+          >
+            <PlusCircleIcon className="h-12 w-12" />
+          </button>
+        </div>
+        <div className="mt-4 grid grid-cols-1 gap-4">
+          {course.modules.map(({ title, id }) => (
             <Link href={`${courseId}/modules/${id}`} key={id}>
-              {id}
+              <div className="cursor-pointer rounded-xl border p-4 shadow-md">
+                <h4 className="text-lg font-medium">
+                  {title} - {id}
+                </h4>
+              </div>
             </Link>
           ))}
         </div>
