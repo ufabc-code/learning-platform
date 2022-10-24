@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import { QueryClient } from 'react-query'
 import { trpc, client } from 'utils/trpc'
 
 const AppContent = () => {
