@@ -1,6 +1,7 @@
 import Tabs from 'components/tabs'
 import { useToast, icons } from 'components/toast'
 import type { NextPage } from 'next'
+import router from 'next/router'
 import { trpc, client } from 'utils/trpc'
 
 const AppContent = () => {
@@ -40,6 +41,17 @@ const AppContent = () => {
         >
           click to create a toast
         </button>
+
+        <button
+          onClick={() => {
+            
+            router.push("./student")
+          }}
+          className="mx-8 bg-green-500 p-4"
+        >
+          click to go to student view
+        </button>
+
       </div>
 
       <h1>Tab example</h1>
