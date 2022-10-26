@@ -1,10 +1,11 @@
-import Lesson from './lesson'
+import CodeLesson from './codeLesson'
+import QuizLesson from './quizLesson'
 
 class Module {
   public id: string
   public title: string
   public description: string
-  public lessons: Lesson[]
+  public lessons: (CodeLesson | QuizLesson)[]
 
   constructor({ id, title, description, lessons }: Module) {
     this.id = id

@@ -2,7 +2,6 @@ import AdminPageBase from 'components/adminPageBase'
 import Switch from 'components/forms/switch'
 import IconButton from 'components/iconButton'
 import type { NextPage } from 'next'
-import { QueryClient } from 'react-query'
 import Course from 'server/entities/course'
 import { trpc, client } from 'utils/trpc'
 

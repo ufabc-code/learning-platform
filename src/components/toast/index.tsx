@@ -124,7 +124,7 @@ export function ToastSection() {
             key={index}
             message={message}
             icon={icon}
-            handleCloseToast={() => handleCloseToast(_id!)}
+            handleCloseToast={() => _id && handleCloseToast(_id)}
           />
         ))}
       </div>
