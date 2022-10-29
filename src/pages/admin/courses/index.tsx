@@ -1,5 +1,6 @@
-import AdminPageBase from 'components/adminPageBase'
+import AdminPageBase from 'components/admin/pageBase'
 import type { NextPage } from 'next'
+import Link from 'next/link'
 import { trpc, client } from 'utils/trpc'
 
 const Courses: NextPage = () => {
@@ -14,11 +15,11 @@ const Courses: NextPage = () => {
         title: 'title-' + courses?.length,
         description: '',
         modules: [],
-        slug: ''
+        slug: '',
       },
       {
-        onSuccess: invalidateGetAll
-      }
+        onSuccess: invalidateGetAll,
+      },
     )
   }
 
@@ -34,11 +35,15 @@ const Courses: NextPage = () => {
         <ul className="flex flex-col gap-y-2">
           {!!courses &&
             courses.map(({ id, title }) => (
-              <li key={id} className="flex border border-solid border-black">
-                <h6 className="w-1/3 text-2xl">{title}</h6>
-                <span className="w-1/3">Lorem ipsum</span>
-                <span className="w-1/3">Lorem, ipsum</span>
-              </li>
+              <Link href={`courses/${id}`} key={id}>
+                <a>
+                  <li className="flex border border-solid border-black">
+                    <h6 className="w-1/3 text-2xl">{title}</h6>
+                    <span className="w-1/3">Lorem ipsum</span>
+                    <span className="w-1/3">Lorem, ipsum</span>
+                  </li>
+                </a>
+              </Link>
             ))}
         </ul>
       </div>

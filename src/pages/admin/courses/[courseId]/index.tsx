@@ -1,7 +1,7 @@
 import {
   DocumentCheckIcon,
   PlusCircleIcon,
-  TrashIcon
+  TrashIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -35,13 +35,13 @@ function Courses() {
     courseUpdate.mutate(
       {
         id: course.id,
-        course
+        course,
       },
       {
         onSuccess: () => {
           client.invalidateQueries(['courses.get', { id: course.id }])
-        }
-      }
+        },
+      },
     )
   }
 
@@ -52,7 +52,7 @@ function Courses() {
       id: Math.random().toString(),
       title: '',
       description: '',
-      lessons: []
+      lessons: [],
     }
 
     courseUpdate.mutate(
@@ -60,14 +60,14 @@ function Courses() {
         id: course.id,
         course: {
           ...course,
-          modules: [...course.modules, newModule]
-        }
+          modules: [...course.modules, newModule],
+        },
       },
       {
         onSuccess: () => {
           client.invalidateQueries(['courses.get', { id: course.id }])
-        }
-      }
+        },
+      },
     )
   }
 
@@ -76,15 +76,15 @@ function Courses() {
 
     deleteCourse.mutate(
       {
-        id: course.id
+        id: course.id,
       },
       {
         onSuccess: () => {
           client.invalidateQueries(['courses.get', { id: course.id }])
           client.invalidateQueries('courses.list')
           router.push(`/`)
-        }
-      }
+        },
+      },
     )
   }
 
