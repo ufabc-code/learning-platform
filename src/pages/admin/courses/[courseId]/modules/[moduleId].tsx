@@ -2,7 +2,7 @@ import {
   CodeBracketIcon,
   DocumentCheckIcon,
   QuestionMarkCircleIcon,
-  TrashIcon
+  TrashIcon,
 } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import CodeLesson from 'server/entities/codeLesson'
 import Module from 'server/entities/module'
 import QuizLesson from 'server/entities/quizLesson'
 import { client, trpc } from 'utils/trpc'
-import { LessonEditor } from './components/lessonEditor'
+import { LessonEditor } from 'components/admin/lessonEditor'
 
 function emptyCodeLesson(): CodeLesson {
   return {
@@ -19,14 +19,14 @@ function emptyCodeLesson(): CodeLesson {
     solution: {
       code: '',
       language: '',
-      text: ''
+      text: '',
     },
     template: {
       code: '',
-      language: ''
+      language: '',
     },
     tests: [],
-    text: 'string'
+    text: 'string',
   }
 }
 
@@ -38,8 +38,8 @@ function emptyQuizLesson(): QuizLesson {
     alternatives: [],
     solution: {
       text: '',
-      correct: []
-    }
+      correct: [],
+    },
   }
 }
 
@@ -69,14 +69,14 @@ function EditModule() {
         id: course.id,
         course: {
           ...course,
-          modules: course.modules.filter(({ id }) => id !== module.id)
-        }
+          modules: course.modules.filter(({ id }) => id !== module.id),
+        },
       },
       {
         onSuccess: () => {
           router.push(`/cursos/${course.id}`)
-        }
-      }
+        },
+      },
     )
   }
 
@@ -92,14 +92,14 @@ function EditModule() {
               return module
             }
             return m
-          })
-        }
+          }),
+        },
       },
       {
         onSuccess: () => {
           client.invalidateQueries(['courses.get', { id: course.id }])
-        }
-      }
+        },
+      },
     )
   }
 
@@ -107,7 +107,7 @@ function EditModule() {
     if (!course || !module) return
     setModule({
       ...module,
-      lessons: [...module.lessons, lesson]
+      lessons: [...module.lessons, lesson],
     })
   }
 
@@ -130,7 +130,7 @@ function EditModule() {
           return lesson
         }
         return l
-      })
+      }),
     })
   }
 

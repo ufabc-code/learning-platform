@@ -2,6 +2,7 @@
  * @jest-environment jest-environment-jsdom
  */
 
+import React from 'react'
 import Container from '.'
 import { render, screen } from '@testing-library/react'
 
