@@ -4,8 +4,8 @@ import { TrashIcon } from '@heroicons/react/24/outline'
 import CodeLesson from 'server/entities/codeLesson'
 import Module from 'server/entities/module'
 import QuizLesson from 'server/entities/quizLesson'
-import { CodeLessonEditor } from './codeLessonEditor'
-import { QuizLessonEditor } from './quizLessonEditor'
+import { CodeLessonEditor } from '../codeLessonEditor'
+import { QuizLessonEditor } from '../quizLessonEditor'
 
 function emptyCodeLesson(): CodeLesson {
   return {
@@ -14,14 +14,14 @@ function emptyCodeLesson(): CodeLesson {
     solution: {
       code: '',
       language: '',
-      text: ''
+      text: '',
     },
     template: {
       code: '',
-      language: ''
+      language: '',
     },
     tests: [],
-    text: 'string'
+    text: 'string',
   }
 }
 
@@ -33,8 +33,8 @@ function emptyQuizLesson(): QuizLesson {
     alternatives: [],
     solution: {
       text: '',
-      correct: []
-    }
+      correct: [],
+    },
   }
 }
 
@@ -49,7 +49,7 @@ export function LessonEditor({
   lesson,
   updateLesson,
   module,
-  setModule
+  setModule,
 }: LessonEditorProps) {
   function handleMoveLessonForward() {
     const index = module.lessons.findIndex(({ id }) => id === lesson.id)
@@ -76,7 +76,7 @@ export function LessonEditor({
     module.lessons.splice(
       module.lessons.findIndex(({ id }) => id === lesson.id) + 1,
       0,
-      newLesson
+      newLesson,
     )
     setModule({ ...module })
   }
