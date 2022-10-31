@@ -1,19 +1,11 @@
-import AdminPageBase from 'components/adminPageBase'
-import Switch from 'components/forms/switch'
-import IconButton from 'components/iconButton'
+import AdminPageBase from 'components/admin/pageBase'
 import type { NextPage } from 'next'
-import Course from 'server/entities/course'
+import Link from 'next/link'
 import { trpc, client } from 'utils/trpc'
 
 const Courses: NextPage = () => {
-  const {
-    data: courses,
-    isError,
-    isLoading
-  } = trpc.useQuery(['courses.getAll'])
+  const { data: courses } = trpc.useQuery(['courses.getAll'])
   const { mutate: createCourse } = trpc.useMutation('courses.create')
-  const { mutate: deleteCourse } = trpc.useMutation('courses.delete')
-  const { mutate: updateCourse } = trpc.useMutation('courses.update')
 
   const invalidateGetAll = () => client.invalidateQueries(['courses.getAll'])
 
@@ -23,24 +15,12 @@ const Courses: NextPage = () => {
         title: 'title-' + courses?.length,
         description: '',
         modules: [],
-        slug: ''
+        slug: '',
       },
       {
-        onSuccess: invalidateGetAll
-      }
+        onSuccess: invalidateGetAll,
+      },
     )
-  }
-
-  const handleSwitchChange = (isChecked: boolean, id: string) => {
-    // TODO send to api to activate/deactivate course
-  }
-
-  const handleDeleteCourse = (id: string) => {
-    deleteCourse({ id }, { onSuccess: invalidateGetAll })
-  }
-
-  const handleEditCourse = ({ id, ...course }: Course) => {
-    updateCourse({ course, id }, { onSuccess: invalidateGetAll })
   }
 
   return (
@@ -54,19 +34,16 @@ const Courses: NextPage = () => {
         </button>
         <ul className="flex flex-col gap-y-2">
           {!!courses &&
-            courses.map(({ id, title, ...rest }) => (
-              <li key={id} className="flex border border-solid border-black">
-                <h6 className="w-1/4 text-2xl">{title}</h6>
-                <span className="w-1/4">Lorem ipsum</span>
-                <span className="w-1/4">Lorem, ipsum</span>
-                <div className="flex w-1/4 items-center">
-                  <IconButton onClick={() => handleDeleteCourse(id)} />
-                  <IconButton
-                    onClick={() => handleEditCourse({ id, title, ...rest })}
-                  />
-                  <Switch onChangeChecked={handleSwitchChange} id={id} />
-                </div>
-              </li>
+            courses.map(({ id, title }) => (
+              <Link href={`courses/${id}`} key={id}>
+                <a>
+                  <li className="flex border border-solid border-black">
+                    <h6 className="w-1/3 text-2xl">{title}</h6>
+                    <span className="w-1/3">Lorem ipsum</span>
+                    <span className="w-1/3">Lorem, ipsum</span>
+                  </li>
+                </a>
+              </Link>
             ))}
         </ul>
       </div>

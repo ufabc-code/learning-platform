@@ -1,3 +1,4 @@
+import Container from 'components/container'
 import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 
@@ -8,7 +9,7 @@ const AdminPageBase: React.FC<PropsWithChildren<AdminPageBaseProps>> = ({
   title
 }): JSX.Element => {
   return (
-    <div className="container mx-auto">
+    <Container>
       <div className="py-12">
         <h1 className="text-4xl font-bold">Admin</h1>
         <div className="mt-10 flex gap-x-10">
@@ -25,7 +26,7 @@ const AdminPageBase: React.FC<PropsWithChildren<AdminPageBaseProps>> = ({
           </section>
         </div>
       </div>
-    </div>
+    </Container>
   )
 }
 
