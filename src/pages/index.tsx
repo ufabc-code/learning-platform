@@ -62,7 +62,11 @@ const AppContent = () => {
           ]}
         />
       </div>
-      <pre>{JSON.stringify(coursesQuery.data, null, 2)}</pre>
+      {coursesQuery.data?.map((course) => (
+        <a href={`/cursos/${course.id}`} key={course.id}>
+          {JSON.stringify(course.id, null, 2)}
+        </a>
+      ))}
     </div>
   )
 }
