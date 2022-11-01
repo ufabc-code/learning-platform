@@ -10,19 +10,19 @@ type Answer = z.infer<typeof LessonUserAnswerSchema.shape.answer>
 function parseAnswer(answer: Answer): CodeUserAnswer | QuizUserAnswer {
   if ('code' in answer) {
     return new CodeUserAnswer({
-      ...answer
+      ...answer,
     })
   }
 
   if ('alternatives' in answer) {
     return new QuizUserAnswer({
-      ...answer
+      ...answer,
     })
   }
   throw new Error('Invalid answer')
 }
 
-export const evaluateLesson = createRouter().query('evaluate', {
+export const evaluateLesson = createRouter().mutation('evaluate', {
   input: LessonUserAnswerSchema,
   resolve: async ({ input }) => {
     const { courseId, moduleId, lessonId, answer } = input
@@ -30,7 +30,7 @@ export const evaluateLesson = createRouter().query('evaluate', {
       courseId,
       moduleId,
       lessonId,
-      answer: parseAnswer(answer)
+      answer: parseAnswer(answer),
     })
-  }
+  },
 })
