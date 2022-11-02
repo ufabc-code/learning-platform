@@ -5,10 +5,6 @@ interface QuizVisualizerProps {
 }
 
 export function QuizVisualizer({ quizLesson }: QuizVisualizerProps) {
-  var keys = Object.keys(quizLesson);
-  
-  
-
   return (
     <div className="m-2 py-2">
       <h1 className="py-2 text-2xl font-bold">Quiz Visualizer</h1>
@@ -23,18 +19,19 @@ export function QuizVisualizer({ quizLesson }: QuizVisualizerProps) {
         </div>
         <div>
           <h2 className="py-2">{quizLesson.text}</h2>
-          <div className="w-48 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+          <div className="w-max rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
             {quizLesson.alternatives.map((alternative, index) => (
-            <div key={index}>
-              <button
-              type="button"
-              className="w-full cursor-pointer border-b border-gray-200 py-2 px-4 text-left font-medium hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >
-              Settings
-            </button>
+              <div key={index}>
+                <button
+                  type="button"
+                  className="w-full cursor-pointer border-b border-gray-200 py-2 px-4 text-left font-medium hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
+                >
+                  {alternative.text}
+                </button>
               </div>
             ))}
           </div>
+
           <br />
         </div>
 
@@ -45,7 +42,6 @@ export function QuizVisualizer({ quizLesson }: QuizVisualizerProps) {
         >
           Verificar
         </button>
-        {/* <h1>{JSON.stringify(quizLesson.alternatives)}</h1> */}
         {/* <pre>{JSON.stringify(quizLesson, null, 2)}</pre> */}
       </div>
     </div>
