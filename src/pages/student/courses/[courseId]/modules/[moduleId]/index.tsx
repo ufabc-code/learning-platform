@@ -9,7 +9,8 @@ import { QuizVisualizer } from './components/quizVisualizer'
 function ModuleVisualizer() {
   const router = useRouter()
   const { courseId, moduleId } = router.query
-  const [type, setType] = useState('quiz')
+  // const [type, setType] = useState('quiz')
+  const [type, setType] = useState('code')
   const courseQuery = trpc.useQuery(['courses.get', { id: courseId as string }])
   const course = courseQuery.data
 
