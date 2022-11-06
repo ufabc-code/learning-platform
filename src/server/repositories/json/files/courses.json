@@ -1,1 +1,51 @@
-[{"id":"f8a7014b-1d59-41ac-b8bd-600afb89c982","title":"Curso de Python","description":"este curso ensina python","modules":[{"id":"0.6705410453243992","title":"variaveis","description":"ensina variaveis","lessons":[{"id":"0.15750786643702486","type":"code","solution":{"text":"esta é uma explicação","code":"print('ola')","language":"python"},"template":{"code":"# template basico","language":"pyhton"},"tests":[{"input":"ola","expected":"ola"},{"input":"mundo","expected":"ola"}],"text":"string"},{"id":"0.172244008144258","type":"quiz","text":"selecione algo","alternatives":[{"text":"Alternativa 1"},{"text":"Alternativa 2"},{"text":"Errada 1"},{"text":"Errada 2 "}],"solution":{"text":"correta é a 1 e 2","correct":[0,1]}}]}],"slug":"curso-python"}]
+[
+  {
+    "id": "f8a7014b-1d59-41ac-b8bd-600afb89c982",
+    "title": "Curso de Python",
+    "description": "este curso ensina python",
+    "modules": [
+      {
+        "id": "0.6705410453243992",
+        "title": "variaveis",
+        "description": "ensina variaveis",
+        "lessons": [
+          {
+            "id": "0.15750786643702486",
+            "type": "code",
+            "solution": {
+              "text": "esta é uma explicação",
+              "code": "print('ola')",
+              "language": "python"
+            },
+            "template": { "code": "# template basico", "language": "pyhton" },
+            "tests": [
+              { "input": "ola", "expected": "ola" },
+              { "input": "mundo", "expected": "ola" }
+            ],
+            "text": "string"
+          },
+          {
+            "id": "0.172244008144258",
+            "type": "quiz",
+            "text": "Seja bem-vindo ao curso introdutório de programação competitiva. Neste curso você aprenderá os conceitos fundamentais da programação.",
+            "alternatives": [
+              { "text": "Alternativa 1" },
+              { "text": "Alternativa 2" },
+              { "text": "Errada 1" },
+              { "text": "Errada 2 " }
+            ],
+            "solution": { "text": "correta é a 1 e 2", "correct": [0, 1] }
+          }
+        ]
+      }
+    ],
+    "slug": "curso-python"
+  },
+  {
+    "id": "a9b1cbca-eb45-4513-882a-89f4b7de1d89",
+    "title": "",
+    "description": "",
+    "modules": [],
+    "slug": ""
+  }
+]
