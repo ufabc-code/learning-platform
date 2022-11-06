@@ -9,8 +9,7 @@ import { QuizVisualizer } from './components/quizVisualizer'
 function ModuleVisualizer() {
   const router = useRouter()
   const { courseId, moduleId } = router.query
-  // const [type, setType] = useState('quiz')
-  const [type, setType] = useState('code')
+  const [type, setType] = useState('quiz')
   const courseQuery = trpc.useQuery(['courses.get', { id: courseId as string }])
   const course = courseQuery.data
 
@@ -22,7 +21,7 @@ function ModuleVisualizer() {
 
   return (
     <div className="m-2">
-      <h1 className="text-3xl font-bold py-3">ModuleVisualizer</h1>
+      <h1 className="py-3 text-3xl font-bold">ModuleVisualizer</h1>
       <div>
         {type === 'code' && (
           <CodeVisualizer codeLesson={currentModule.lessons[0] as CodeLesson} />
