@@ -16,7 +16,7 @@ const jestConfig = createJestConfig({
   coveragePathIgnorePatterns: ['.d.ts', '.spec.ts', '.spec.tsx'],
   preset: 'ts-jest',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  moduleDirectories: ['node_modules', '<rootDir>/'],
+  moduleDirectories: ['node_modules', '<rootDir>/src'],
   testMatch: ['<rootDir>/src/**/*.spec.ts', '<rootDir>/src/**/*.spec.tsx'],
   transform: {
     '^.+\\.tsx?$': [
