@@ -11,6 +11,7 @@
     "commit": "git-cz",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:dev": "jest --watch",
     "tsc": "tsc"
   },
   "dependencies": {
