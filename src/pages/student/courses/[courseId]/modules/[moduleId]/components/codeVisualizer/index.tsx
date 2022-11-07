@@ -1,3 +1,5 @@
+import TestCase from 'components/student/courses/[courseId]/modules/[moduleId]/components/codeVisualizer/TestCase'
+import Tabs from 'components/tabs'
 import CodeLesson from 'server/entities/codeLesson'
 
 interface CodeVisualizerProps {
@@ -7,26 +9,65 @@ interface CodeVisualizerProps {
 export function CodeVisualizer({ codeLesson }: CodeVisualizerProps) {
   return (
     <div className="m-2 py-2">
-      <h1 className="py-2 text-2xl font-bold">Code Visualizer</h1>
       <div>
-        <div className="border-y-2">
-          <h1 className="pt-4 pb-1 font-semibold">
-            Resolva o seguinte problema de programação com seu próprio código:
-          </h1>
-        </div>
-        <div>
-          <h2 className="py-2">{codeLesson.text}</h2>
-          <div className="w-max rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900">
-            <textarea
-              rows={15}
-              cols={100}
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-              placeholder="Your code..."
-              value={codeLesson.template.code}
-            ></textarea>
-          </div>
-          <br />
-        </div>
+        <Tabs
+          active={0}
+          tabs={[
+            {
+              name: 'Exercício',
+              children: (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>{codeLesson.text}</div>
+                  <div>
+                    <textarea
+                      rows={15}
+                      cols={100}
+                      className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900"
+                      placeholder="Your code..."
+                      value={codeLesson.template.code}
+                    ></textarea>
+                  </div>
+                </div>
+              ),
+            },
+            {
+              name: 'Testes',
+              children: (
+                <div className="grid grid-cols-1 gap-4 pb-4">
+                  {codeLesson.tests.map((test, index) => (
+                    <TestCase
+                      key={index}
+                      label={`Teste #${index + 1}`}
+                      test={test}
+                    />
+                  ))}
+                </div>
+              ),
+            },
+            {
+              name: 'Solução',
+              children: (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h1 className="text-2xl font-bold">Solução</h1>
+                    {codeLesson.solution.text}
+                  </div>
+                  <div>
+                    <textarea
+                      rows={15}
+                      cols={100}
+                      className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900"
+                      disabled={true}
+                      value={codeLesson.solution.code}
+                    ></textarea>
+                  </div>
+                </div>
+              ),
+            },
+          ]}
+        />
+      </div>
+      <div className="mt-8">
         <button
           type="button"
           onClick={() => {
@@ -41,6 +82,16 @@ export function CodeVisualizer({ codeLesson }: CodeVisualizerProps) {
           Verificar
         </button>
       </div>
+      {/* <pre>
+        <code>{JSON.stringify(codeLesson, null, 2)}</code>
+      </pre>
+      <div>
+        <div>
+          
+          <br />
+        </div>
+        
+      </div> */}
     </div>
   )
 }
