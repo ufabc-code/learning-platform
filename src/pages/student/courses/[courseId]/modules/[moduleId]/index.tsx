@@ -20,9 +20,9 @@ function ModuleVisualizer() {
   if (!currentModule) return null
 
   return (
-    <div>
-      <h1>ModuleVisualizer</h1>
-      <div className="borde-blue-500 border-2">
+    <div className="m-2">
+      <h1 className="py-3 text-3xl font-bold">ModuleVisualizer</h1>
+      <div>
         {type === 'code' && (
           <CodeVisualizer codeLesson={currentModule.lessons[0] as CodeLesson} />
         )}
