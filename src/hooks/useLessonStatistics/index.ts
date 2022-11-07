@@ -13,6 +13,8 @@ const useLessonStatistics = ({
   const { mutate: evaluateModule } = trpc.useMutation('evaluateModule.evaluate')
   const { mutate: evaluateLesson } = trpc.useMutation('evaluateLesson.evaluate')
 
+  console.log({ data })
+
   const { lessons } =
     data?.modules.find((module) => module.id === moduleId) || {}
 
