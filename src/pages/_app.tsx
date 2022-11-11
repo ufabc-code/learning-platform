@@ -8,16 +8,16 @@ import '../styles/globals.css'
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
-  pageProps: { session, ...pageProps }
+  pageProps: { session, ...pageProps },
 }) => {
   const trpcClient = trpc.createClient({
     url: '/api/trpc',
     headers() {
       const token = localStorage.getItem('token') || ''
       return {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       }
-    }
+    },
   })
   return (
     <ToastProvider>
