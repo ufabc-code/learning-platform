@@ -12,7 +12,7 @@ class UserAnswerStatisticRepositoryInMemory
         userId !== userAnswerStatistic.userId ||
         courseId !== userAnswerStatistic.courseId ||
         moduleId !== userAnswerStatistic.moduleId ||
-        lessonId !== userAnswerStatistic.lessonId
+        lessonId !== userAnswerStatistic.lessonId,
     )
     this.userAnswerStatistics.push(userAnswerStatistic)
   }
@@ -23,6 +23,20 @@ class UserAnswerStatisticRepositoryInMemory
 
   async clear(): Promise<void> {
     this.userAnswerStatistics = []
+  }
+
+  async findByUserAndCourse({
+    userId,
+    courseId,
+  }: {
+    userId: string
+    courseId: string
+  }): Promise<UserAnswerStatistic[]> {
+    return this.userAnswerStatistics.filter(
+      (userAnswerStatistic) =>
+        userAnswerStatistic.userId === userId &&
+        userAnswerStatistic.courseId === courseId,
+    )
   }
 }
 

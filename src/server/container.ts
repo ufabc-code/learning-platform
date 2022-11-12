@@ -26,8 +26,8 @@ const dev: Container = {
   userAnswerStatisticRepository: new UserAnswerStatisticRepositoryJSON(),
   userRepository: new UserRepositoryJSON(),
   authProviders: {
-    'fake-auth-provider': new FakeAuthProvider()
-  }
+    'fake-auth-provider': new FakeAuthProvider(),
+  },
 }
 
 const test: Container = {
@@ -36,8 +36,8 @@ const test: Container = {
   userAnswerStatisticRepository: new UserAnswerStatisticRepositoryInMemory(),
   userRepository: new UserRepositoryInMemory(),
   authProviders: {
-    'fake-auth-provider': new FakeAuthProvider()
-  }
+    'fake-auth-provider': new FakeAuthProvider(),
+  },
 }
 
 export function container(): Container {
