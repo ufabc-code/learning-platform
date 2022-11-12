@@ -15,7 +15,7 @@ class UserAnswerStatisticRepositoryJSON
         userId !== userAnswerStatistic.userId ||
         courseId !== userAnswerStatistic.courseId ||
         moduleId !== userAnswerStatistic.moduleId ||
-        lessonId !== userAnswerStatistic.lessonId
+        lessonId !== userAnswerStatistic.lessonId,
     )
     userAnswerStatistics.push(userAnswerStatistic)
     await this.saveUserAnswerStatisticsToFile(userAnswerStatistics)
@@ -38,19 +38,19 @@ class UserAnswerStatisticRepositoryJSON
           'repositories',
           'json',
           'files',
-          this.filename
+          this.filename,
         ),
-        'utf8'
-      )
+        'utf8',
+      ),
     )
     return userAnswerStatistics.map(
       (userAnswerStatistic) =>
-        new UserAnswerStatistic({ ...userAnswerStatistic })
+        new UserAnswerStatistic({ ...userAnswerStatistic }),
     )
   }
 
   private async saveUserAnswerStatisticsToFile(
-    userAnswerStatistics: UserAnswerStatistic[]
+    userAnswerStatistics: UserAnswerStatistic[],
   ) {
     fs.writeFileSync(
       path.join(
@@ -59,9 +59,24 @@ class UserAnswerStatisticRepositoryJSON
         'repositories',
         'json',
         'files',
-        this.filename
+        this.filename,
       ),
-      JSON.stringify(userAnswerStatistics)
+      JSON.stringify(userAnswerStatistics),
+    )
+  }
+
+  async findByUserAndCourse({
+    userId,
+    courseId,
+  }: {
+    userId: string
+    courseId: string
+  }): Promise<UserAnswerStatistic[]> {
+    const userAnswerStatistics = await this.getUserAnswerStatisticsFromFile()
+    return userAnswerStatistics.filter(
+      (userAnswerStatistic) =>
+        userAnswerStatistic.userId === userId &&
+        userAnswerStatistic.courseId === courseId,
     )
   }
 }
