@@ -1,12 +1,13 @@
 export enum CodeRunnerStatus {
   OK = 'OK',
   ERROR = 'ERROR',
-  TIMEOUT = 'TIMEOUT'
+  TIMEOUT = 'TIMEOUT',
 }
 
 export interface ICodeRunnerResult {
   output: string
   status: CodeRunnerStatus
+  stderr?: string
 }
 
 export interface ICodeRunner {
