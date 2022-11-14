@@ -2,6 +2,7 @@ import FakeAuthProvider from './providers/authProviders/fakeAuthProvider'
 import IAuthProvider from './providers/authProviders/iAuthProvider'
 import FakeCodeRunner from './providers/codeRunner/fakeCodeRunner'
 import { ICodeRunner } from './providers/codeRunner/iCodeRunner'
+import Judge0 from './providers/codeRunner/judge0'
 import ICourseRepository from './repositories/iCourseRepository'
 import CourseRepositoryInMemory from './repositories/in-memory/courseRepositoryInMemory'
 import UserAnswerStatisticRepositoryInMemory from './repositories/in-memory/userAnswerStatisticRepositoryInMemory'
@@ -22,7 +23,7 @@ interface Container {
 
 const dev: Container = {
   courseRepository: new CourseRepositoryJSON(),
-  codeRunner: new FakeCodeRunner(),
+  codeRunner: new Judge0(),
   userAnswerStatisticRepository: new UserAnswerStatisticRepositoryJSON(),
   userRepository: new UserRepositoryJSON(),
   authProviders: {
