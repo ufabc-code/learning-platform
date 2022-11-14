@@ -19,6 +19,27 @@ export function CodeLessonEditor({
   return (
     <div>
       <div className="my-2 rounded-lg border p-4">
+        <div>
+          <label
+            htmlFor="text"
+            className="mb-2 block text-sm font-medium text-gray-900"
+          >
+            Enunciado
+          </label>
+          <textarea
+            value={codeLesson.text}
+            onChange={(e) =>
+              setCodeLesson({ ...codeLesson, text: e.target.value })
+            }
+            id="text"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Enunciado"
+            required
+            rows={6}
+          />
+        </div>
+      </div>
+      <div className="my-2 rounded-lg border p-4">
         <h1 className="my-2">Solução</h1>
         <div>
           <div>
