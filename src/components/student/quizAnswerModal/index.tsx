@@ -1,3 +1,5 @@
+import MarkdownRender from 'components/markdownRender'
+
 interface StudentQuizAnswerProps {
   content: string
   onClose: () => void
@@ -32,9 +34,7 @@ export function StudentQuizAnswer({
         </button>
 
         <div className="p-6 text-center">
-          <h2 className="mb-1 text-lg font-normal text-gray-500 dark:text-gray-400">
-            {content}
-          </h2>
+          <MarkdownRender content={content} />
         </div>
       </div>
     </div>

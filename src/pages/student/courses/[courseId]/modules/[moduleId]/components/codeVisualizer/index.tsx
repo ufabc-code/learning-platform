@@ -1,5 +1,6 @@
 import { PlayIcon } from '@heroicons/react/24/outline'
 import CodeEditor from 'components/codeEditor'
+import MarkdownRender from 'components/markdownRender'
 import TestCase from 'components/student/courses/[courseId]/modules/[moduleId]/components/codeVisualizer/TestCase'
 import Tabs from 'components/tabs'
 import { useState } from 'react'
@@ -60,7 +61,7 @@ export function CodeVisualizer({ codeLesson }: CodeVisualizerProps) {
               name: 'Exercício',
               children: (
                 <div className="grid grid-cols-2 gap-4">
-                  <div>{codeLesson.text}</div>
+                  <MarkdownRender content={codeLesson.text} />
                   <div>
                     <div className="mb-4 flex justify-between">
                       <select
@@ -151,10 +152,7 @@ export function CodeVisualizer({ codeLesson }: CodeVisualizerProps) {
               name: 'Solução',
               children: (
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <h1 className="text-2xl font-bold">Solução</h1>
-                    {codeLesson.solution.text}
-                  </div>
+                  <MarkdownRender content={codeLesson.solution.text} />
                   <div>
                     <CodeEditor
                       code={codeLesson.solution.code}
