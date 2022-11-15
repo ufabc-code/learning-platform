@@ -1,39 +1,73 @@
+import ProgressBar from 'components/student/courses/[courseId]/modules/[moduleId]/components/ProgressBar'
+import Spinner from 'components/student/courses/[courseId]/modules/[moduleId]/components/Spinner'
 import useLessonStatistics from 'hooks/useLessonStatistics'
 import { useRouter } from 'next/router'
 import CodeLesson from 'server/entities/codeLesson'
 import QuizLesson from 'server/entities/quizLesson'
-import { trpc } from 'utils/trpc'
 import { CodeVisualizer } from './components/codeVisualizer'
 import { QuizVisualizer } from './components/quizVisualizer'
 
 function ModuleVisualizer() {
   const router = useRouter()
   const { courseId, moduleId } = router.query
-  const courseQuery = trpc.useQuery(['courses.get', { id: courseId as string }])
-  const course = courseQuery.data
 
-  const { handleEvaluateAnswer, lesson } = useLessonStatistics({
+  const {
+    handleEvaluateAnswer,
+    lessonToDo,
+    examRunning,
+    numberOfLessons,
+    remainingLessons,
+    savingAnswers,
+  } = useLessonStatistics({
     courseId: (courseId as string) || '',
     moduleId: (moduleId as string) || '',
   })
 
-  if (!course) return null
+  if (!examRunning) {
+    return <div>loading exam</div>
+  }
 
-  const currentModule = course.modules.find(({ id }) => id === moduleId)
+  if (!lessonToDo) {
+    return (
+      <div>
+        <h1>Parbéns você completou este módulo</h1>
 
-  if (!currentModule) return null
+        {savingAnswers && (
+          <div>
+            <h3 className="text-xl">Estamos salvando suas respostas</h3>
+            <Spinner />
+          </div>
+        )}
 
-  if (!lesson) {
-    return <div>acabou</div>
+        <button
+          type="button"
+          className={`rounded-lg px-5 py-2.5  text-center text-sm font-medium text-white ${
+            savingAnswers
+              ? 'cursor-not-allowed bg-blue-200'
+              : 'bg-blue-700 hover:bg-blue-800 '
+          }`}
+          disabled={savingAnswers}
+          onClick={() => {
+            router.push(`/student/courses/${courseId}`)
+          }}
+        >
+          Ir para home
+        </button>
+      </div>
+    )
   }
 
   return (
-    <div>
-      <h1>ModuleVisualizer</h1>
-      <div className="borde-blue-500 border-2">
-        {lesson.type === 'code' && (
+    <div className="p-8">
+      <ProgressBar
+        progress={Math.floor(
+          ((numberOfLessons - remainingLessons) / numberOfLessons) * 100,
+        )}
+      />
+      <div>
+        {lessonToDo.type === 'code' && (
           <CodeVisualizer
-            codeLesson={lesson as CodeLesson}
+            codeLesson={lessonToDo as CodeLesson}
             handleEvaluateAnswer={(answer: {
               code: string
               language: string
@@ -42,9 +76,9 @@ function ModuleVisualizer() {
             }}
           />
         )}
-        {lesson.type === 'quiz' && (
+        {lessonToDo.type === 'quiz' && (
           <QuizVisualizer
-            quizLesson={lesson as QuizLesson}
+            quizLesson={lessonToDo as QuizLesson}
             handleEvaluateAnswer={(answer: { alternatives: number[] }) => {
               handleEvaluateAnswer(answer)
             }}

@@ -12,7 +12,9 @@ const useLessonStatistics = ({
   const { mutate: evaluateModule } = trpc.useMutation('evaluateModule.evaluate')
   const { mutate: evaluateLesson } = trpc.useMutation('evaluateLesson.evaluate')
   const [lessons, setLessons] = useState<Lesson[]>([])
-  const [flag, setFlag] = useState(false) // to prevent bug at useEffect
+  const [examRunning, setExamRunning] = useState(false)
+  const [numberOfLessons, setNumberOfLessons] = useState(0)
+  const [savingAnswers, setSavingAnswers] = useState(false)
 
   const statistics = useRef<
     Record<
@@ -25,20 +27,40 @@ const useLessonStatistics = ({
   >({})
 
   useEffect(() => {
-    if (data && lessons.length === 0 && !flag) {
-      setFlag(true)
-
+    if (data && lessons.length === 0 && !examRunning) {
       const { modules } = data
-      setLessons(
-        modules.find((module) => module.id === moduleId)?.lessons || [],
-      )
+      const lessons = modules.find(({ id }) => id === moduleId)?.lessons || []
+
+      setLessons(lessons)
+      setNumberOfLessons(lessons.length)
+      setExamRunning(true)
     }
-  }, [courseId, moduleId, data, lessons.length, flag])
+  }, [courseId, moduleId, data, lessons.length, examRunning])
+
+  // save answer
+  useEffect(() => {
+    if (lessons.length === 0 && examRunning) {
+      const statisticsArr = Object.entries(statistics.current).map(
+        ([lessonId, { attempts, answer }]) => {
+          return {
+            attempts,
+            answer: { courseId, moduleId, lessonId, answer },
+          }
+        },
+      )
+      setSavingAnswers(true)
+      evaluateModule(statisticsArr, {
+        onSuccess: () => {
+          setSavingAnswers(false)
+        },
+      })
+    }
+  }, [courseId, evaluateModule, examRunning, lessons.length, moduleId])
 
   const handleEvaluateAnswer = (
     answer: { code: string; language: string } | { alternatives: number[] },
   ) => {
-    const firstElement = lessons?.shift()
+    const firstElement = lessons[0]
 
     if (lessons && firstElement?.id) {
       evaluateLesson(
@@ -50,12 +72,17 @@ const useLessonStatistics = ({
                 Number(statistics.current[firstElement.id]?.attempts || 0) + 1,
               answer,
             }
+
+            console.log(statistics.current)
+
             if (!data.correct) {
               lessons.push(firstElement)
             }
+            lessons.shift()
             setLessons([...lessons])
           },
           onError() {
+            lessons.shift()
             setLessons([...lessons])
           },
         },
@@ -63,16 +90,14 @@ const useLessonStatistics = ({
     }
   }
 
-  const handleSaveAnswers = () => {
-    const statisticsArr = Object.entries(statistics.current).map(
-      ([lessonId, { attempts, answer }]) => {
-        return { attempts, answer: { courseId, moduleId, lessonId, answer } }
-      },
-    )
-    evaluateModule(statisticsArr)
+  return {
+    handleEvaluateAnswer,
+    lessonToDo: lessons[0],
+    examRunning,
+    remainingLessons: lessons.length,
+    numberOfLessons,
+    savingAnswers,
   }
-
-  return { handleEvaluateAnswer, handleSaveAnswers, lesson: lessons[0] }
 }
 
 export default useLessonStatistics

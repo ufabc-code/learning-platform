@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useState } from 'react'
 import {
   ArrowPathIcon,
   CheckCircleIcon,
-  XMarkIcon
+  XMarkIcon,
 } from '@heroicons/react/24/outline'
 
 interface Notification {
@@ -42,7 +42,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
 
   function removeToast(id: number) {
     setNotifications((notifications) =>
-      notifications.filter((notification) => notification._id !== id)
+      notifications.filter((notification) => notification._id !== id),
     )
   }
 
@@ -51,7 +51,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
       value={{
         notifications,
         addToast,
-        removeToast
+        removeToast,
       }}
     >
       {children}
@@ -63,13 +63,13 @@ export const icons = {
   success: {
     color: 'text-green-500',
     background: 'bg-green-100',
-    svg: <CheckCircleIcon className="h-7 w-7" />
+    svg: <CheckCircleIcon className="h-7 w-7" />,
   },
   loading: {
     color: 'text-sky-500',
     background: 'bg-sky-100',
-    svg: <ArrowPathIcon className="h-7 w-7" />
-  }
+    svg: <ArrowPathIcon className="h-7 w-7" />,
+  },
 }
 
 interface ToastProps {
@@ -117,8 +117,8 @@ export function ToastSection() {
   }
 
   return (
-    <div className="sticky top-0 right-0 flex justify-end p-8">
-      <div className="absolute z-10 grid grid-cols-1 gap-4">
+    <div className="sticky top-0 right-0 flex justify-end bg-red-300">
+      <div className="absolute z-10 grid grid-cols-1 gap-4 p-8">
         {reverseArray(notifications).map(({ icon, message, _id }, index) => (
           <Toast
             key={index}
