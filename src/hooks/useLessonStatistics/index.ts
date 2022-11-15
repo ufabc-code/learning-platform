@@ -1,6 +1,5 @@
-import { useRef } from 'react'
-import { CodeUserAnswer } from 'server/entities/codeUserAnswer'
-import { QuizUserAnswer } from 'server/entities/quizUserAnswer'
+import { useEffect, useRef, useState } from 'react'
+import Lesson from 'server/entities/lesson'
 import { trpc } from 'utils/trpc'
 
 type UseLessonStatisticsProps = { courseId: string; moduleId: string }
@@ -12,27 +11,40 @@ const useLessonStatistics = ({
   const { data } = trpc.useQuery(['courses.get', { id: courseId }])
   const { mutate: evaluateModule } = trpc.useMutation('evaluateModule.evaluate')
   const { mutate: evaluateLesson } = trpc.useMutation('evaluateLesson.evaluate')
-
-  console.log({ data })
-
-  const { lessons } =
-    data?.modules.find((module) => module.id === moduleId) || {}
+  const [lessons, setLessons] = useState<Lesson[]>([])
+  const [flag, setFlag] = useState(false) // to prevent bug at useEffect
 
   const statistics = useRef<
     Record<
       string,
-      { attempts: number; answer: CodeUserAnswer | QuizUserAnswer }
+      {
+        attempts: number
+        answer: { code: string; language: string } | { alternatives: number[] }
+      }
     >
   >({})
 
-  const handleEvaluateAnswer = (answer: CodeUserAnswer | QuizUserAnswer) => {
+  useEffect(() => {
+    if (data && lessons.length === 0 && !flag) {
+      setFlag(true)
+
+      const { modules } = data
+      setLessons(
+        modules.find((module) => module.id === moduleId)?.lessons || [],
+      )
+    }
+  }, [courseId, moduleId, data, lessons.length, flag])
+
+  const handleEvaluateAnswer = (
+    answer: { code: string; language: string } | { alternatives: number[] },
+  ) => {
     const firstElement = lessons?.shift()
+
     if (lessons && firstElement?.id) {
       evaluateLesson(
         { courseId, moduleId, lessonId: firstElement.id, answer },
         {
           onSuccess(data) {
-            lessons.push(firstElement)
             statistics.current[firstElement.id] = {
               attempts:
                 Number(statistics.current[firstElement.id]?.attempts || 0) + 1,
@@ -41,6 +53,10 @@ const useLessonStatistics = ({
             if (!data.correct) {
               lessons.push(firstElement)
             }
+            setLessons([...lessons])
+          },
+          onError() {
+            setLessons([...lessons])
           },
         },
       )
@@ -56,7 +72,7 @@ const useLessonStatistics = ({
     evaluateModule(statisticsArr)
   }
 
-  return { handleEvaluateAnswer, handleSaveAnswers, lesson: lessons?.[0] }
+  return { handleEvaluateAnswer, handleSaveAnswers, lesson: lessons[0] }
 }
 
 export default useLessonStatistics
