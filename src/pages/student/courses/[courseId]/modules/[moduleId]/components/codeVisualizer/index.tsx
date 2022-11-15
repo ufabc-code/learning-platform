@@ -13,9 +13,13 @@ import { trpc } from 'utils/trpc'
 
 interface CodeVisualizerProps {
   codeLesson: CodeLesson
+  handleEvaluateAnswer: (answer: { code: string; language: string }) => void
 }
 
-export function CodeVisualizer({ codeLesson }: CodeVisualizerProps) {
+export function CodeVisualizer({
+  codeLesson,
+  handleEvaluateAnswer,
+}: CodeVisualizerProps) {
   const [code, setCode] = useState(codeLesson.template.code)
   const [language, setLanguage] = useState(codeLesson.template.language)
   const [stdin, setStdin] = useState('')
@@ -169,13 +173,7 @@ export function CodeVisualizer({ codeLesson }: CodeVisualizerProps) {
       <div className="mt-8">
         <button
           type="button"
-          onClick={() => {
-            alert(
-              JSON.stringify(codeLesson.solution.text) +
-                '\n' +
-                JSON.stringify(codeLesson.solution.code),
-            )
-          }}
+          onClick={() => handleEvaluateAnswer({ code, language })}
           className="mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
         >
           Verificar

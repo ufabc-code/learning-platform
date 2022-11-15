@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { CodeUserAnswer } from 'server/entities/codeUserAnswer'
 import Lesson from 'server/entities/lesson'
-import { QuizUserAnswer } from 'server/entities/quizUserAnswer'
 import { trpc } from 'utils/trpc'
 
 type UseLessonStatisticsProps = { courseId: string; moduleId: string }
@@ -19,7 +17,10 @@ const useLessonStatistics = ({
   const statistics = useRef<
     Record<
       string,
-      { attempts: number; answer: CodeUserAnswer | QuizUserAnswer }
+      {
+        attempts: number
+        answer: { code: string; language: string } | { alternatives: number[] }
+      }
     >
   >({})
 
@@ -32,10 +33,11 @@ const useLessonStatistics = ({
         modules.find((module) => module.id === moduleId)?.lessons || [],
       )
     }
-  }, [courseId, moduleId, data])
+  }, [courseId, moduleId, data, lessons.length, flag])
 
-
-  const handleEvaluateAnswer = (answer: CodeUserAnswer | QuizUserAnswer) => {
+  const handleEvaluateAnswer = (
+    answer: { code: string; language: string } | { alternatives: number[] },
+  ) => {
     const firstElement = lessons?.shift()
 
     if (lessons && firstElement?.id) {
@@ -70,7 +72,7 @@ const useLessonStatistics = ({
     evaluateModule(statisticsArr)
   }
 
-  return { handleEvaluateAnswer, handleSaveAnswers, lessons }
+  return { handleEvaluateAnswer, handleSaveAnswers, lesson: lessons[0] }
 }
 
 export default useLessonStatistics

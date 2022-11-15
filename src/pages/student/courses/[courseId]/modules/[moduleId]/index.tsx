@@ -1,9 +1,7 @@
 import useLessonStatistics from 'hooks/useLessonStatistics'
 import { useRouter } from 'next/router'
 import CodeLesson from 'server/entities/codeLesson'
-import { CodeUserAnswer } from 'server/entities/codeUserAnswer'
 import QuizLesson from 'server/entities/quizLesson'
-import { QuizUserAnswer } from 'server/entities/quizUserAnswer'
 import { trpc } from 'utils/trpc'
 import { CodeVisualizer } from './components/codeVisualizer'
 import { QuizVisualizer } from './components/quizVisualizer'
@@ -14,7 +12,7 @@ function ModuleVisualizer() {
   const courseQuery = trpc.useQuery(['courses.get', { id: courseId as string }])
   const course = courseQuery.data
 
-  const { handleEvaluateAnswer, lessons } = useLessonStatistics({
+  const { handleEvaluateAnswer, lesson } = useLessonStatistics({
     courseId: (courseId as string) || '',
     moduleId: (moduleId as string) || '',
   })
@@ -25,7 +23,7 @@ function ModuleVisualizer() {
 
   if (!currentModule) return null
 
-  if (!lessons[0]) {
+  if (!lesson) {
     return <div>acabou</div>
   }
 
@@ -33,18 +31,21 @@ function ModuleVisualizer() {
     <div>
       <h1>ModuleVisualizer</h1>
       <div className="borde-blue-500 border-2">
-        {lessons[0]!.type === 'code' && (
+        {lesson.type === 'code' && (
           <CodeVisualizer
-            codeLesson={lessons[0] as CodeLesson}
-            handleEvaluateAnswer={(answer: CodeUserAnswer | QuizUserAnswer) => {
+            codeLesson={lesson as CodeLesson}
+            handleEvaluateAnswer={(answer: {
+              code: string
+              language: string
+            }) => {
               handleEvaluateAnswer(answer)
             }}
           />
         )}
-        {lessons[0]!.type === 'quiz' && (
+        {lesson.type === 'quiz' && (
           <QuizVisualizer
-            quizLesson={lessons[0] as QuizLesson}
-            handleEvaluateAnswer={(answer: CodeUserAnswer | QuizUserAnswer) => {
+            quizLesson={lesson as QuizLesson}
+            handleEvaluateAnswer={(answer: { alternatives: number[] }) => {
               handleEvaluateAnswer(answer)
             }}
           />

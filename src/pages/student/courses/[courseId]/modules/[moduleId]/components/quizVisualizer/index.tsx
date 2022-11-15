@@ -2,12 +2,10 @@ import MarkdownRender from 'components/markdownRender'
 import StudentQuizAnswer from 'components/student/quizAnswerModal'
 import { useState } from 'react'
 import QuizLesson from 'server/entities/quizLesson'
-import { QuizUserAnswer } from 'server/entities/quizUserAnswer'
-import { CodeUserAnswer } from 'server/entities/codeUserAnswer'
 
 interface QuizVisualizerProps {
   quizLesson: QuizLesson
-  handleEvaluateAnswer: (answer: CodeUserAnswer | QuizUserAnswer) => void
+  handleEvaluateAnswer: (answer: { alternatives: number[] }) => void
 }
 
 export function QuizVisualizer({
@@ -56,9 +54,7 @@ export function QuizVisualizer({
       <button
         type="button"
         onClick={() =>
-          handleEvaluateAnswer(
-            new QuizUserAnswer({ alternatives: selectedAlternatives }),
-          )
+          handleEvaluateAnswer({ alternatives: selectedAlternatives })
         }
         className="mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300"
       >
