@@ -14,8 +14,8 @@ beforeAll(async () => {
 
   await courseRepository.save(
     createCourse({
-      lessons: [codeLesson.lesson(), quizLesson.lesson()]
-    })
+      lessons: [codeLesson.lesson(), quizLesson.lesson()],
+    }),
   )
 })
 
@@ -23,7 +23,7 @@ afterAll(async () => {
   const { courseRepository } = container()
   const courses = await courseRepository.getAll()
   await Promise.all(
-    courses.map(async (course) => await courseRepository.delete(course.id))
+    courses.map(async (course) => await courseRepository.delete(course.id)),
   )
 })
 
@@ -36,13 +36,13 @@ describe('Evaluate Module Service', () => {
   const baseCodeLessonUserAnswer: Omit<LessonUserAnswer, 'answer'> = {
     courseId: 'course-1',
     moduleId: 'course-1-module-1',
-    lessonId: 'course-1-module-1-code-1'
+    lessonId: 'course-1-module-1-code-1',
   }
 
   const baseQuizLessonUserAnswer: Omit<LessonUserAnswer, 'answer'> = {
     courseId: 'course-1',
     moduleId: 'course-1-module-1',
-    lessonId: 'course-1-module-1-quiz-1'
+    lessonId: 'course-1-module-1-quiz-1',
   }
 
   it('should evaluate a module as correct ', async () => {
@@ -50,7 +50,7 @@ describe('Evaluate Module Service', () => {
 
     const evaluateModuleService = new EvaluateModuleService(
       new EvaluateLessonService(courseRepository),
-      userAnswerStatisticRepository
+      userAnswerStatisticRepository,
     )
 
     const user = new User({ id: 'user-id', email: 'user@user.com' })
@@ -65,17 +65,17 @@ describe('Evaluate Module Service', () => {
           attempts: 1,
           answer: {
             ...baseCodeLessonUserAnswer,
-            answer: codeLesson.correctAnswer()
-          }
+            answer: codeLesson.correctAnswer(),
+          },
         },
         {
           attempts: 1,
           answer: {
             ...baseQuizLessonUserAnswer,
-            answer: quizLesson.correctAnswer()
-          }
-        }
-      ]
+            answer: quizLesson.correctAnswer(),
+          },
+        },
+      ],
     })
 
     expect(correct).toBe(true)
@@ -87,7 +87,7 @@ describe('Evaluate Module Service', () => {
 
     const evaluateModuleService = new EvaluateModuleService(
       new EvaluateLessonService(courseRepository),
-      userAnswerStatisticRepository
+      userAnswerStatisticRepository,
     )
 
     const user = new User({ id: 'user-id', email: 'user@user.com' })
@@ -102,17 +102,17 @@ describe('Evaluate Module Service', () => {
           attempts: 1,
           answer: {
             ...baseCodeLessonUserAnswer,
-            answer: codeLesson.wrongAnswer()
-          }
+            answer: codeLesson.wrongAnswer(),
+          },
         },
         {
           attempts: 1,
           answer: {
             ...baseQuizLessonUserAnswer,
-            answer: quizLesson.wrongAnswer()
-          }
-        }
-      ]
+            answer: quizLesson.wrongAlternativeSelected(),
+          },
+        },
+      ],
     })
 
     expect(correct).toBe(false)

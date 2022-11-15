@@ -10,8 +10,8 @@ beforeAll(async () => {
 
   await courseRepository.save(
     createCourse({
-      lessons: [quizLesson.lesson()]
-    })
+      lessons: [quizLesson.lesson()],
+    }),
   )
 })
 
@@ -19,7 +19,7 @@ afterAll(async () => {
   const { courseRepository } = container()
   const courses = await courseRepository.getAll()
   await Promise.all(
-    courses.map(async (course) => await courseRepository.delete(course.id))
+    courses.map(async (course) => await courseRepository.delete(course.id)),
   )
 })
 
@@ -27,7 +27,7 @@ describe('Evaluate Lesson Service [quiz lesson]', () => {
   const baseLessonUserAnswer: Omit<LessonUserAnswer, 'answer'> = {
     courseId: 'course-1',
     moduleId: 'course-1-module-1',
-    lessonId: 'course-1-module-1-quiz-1'
+    lessonId: 'course-1-module-1-quiz-1',
   }
 
   it('Should evaluate quiz lesson as correct', async () => {
@@ -37,20 +37,33 @@ describe('Evaluate Lesson Service [quiz lesson]', () => {
 
     const { correct } = await evaluateLessonService.execute({
       ...baseLessonUserAnswer,
-      answer: quizLesson.correctAnswer()
+      answer: quizLesson.correctAnswer(),
     })
 
     expect(correct).toBe(true)
   })
 
-  it('Should evaluate quiz lesson as incorrect', async () => {
+  it('Should evaluate quiz lesson as incorrect [wrong alternative selected]', async () => {
     const { courseRepository } = container()
     const evaluateLessonService = new EvaluateLessonService(courseRepository)
     const quizLesson = createQuizLesson()
 
     const { correct } = await evaluateLessonService.execute({
       ...baseLessonUserAnswer,
-      answer: quizLesson.wrongAnswer()
+      answer: quizLesson.wrongAlternativeSelected(),
+    })
+
+    expect(correct).toBe(false)
+  })
+
+  it('Should evaluate quiz lesson as incorrect [missing correct alternative]', async () => {
+    const { courseRepository } = container()
+    const evaluateLessonService = new EvaluateLessonService(courseRepository)
+    const quizLesson = createQuizLesson()
+
+    const { correct } = await evaluateLessonService.execute({
+      ...baseLessonUserAnswer,
+      answer: quizLesson.missingCorrectAlternative(),
     })
 
     expect(correct).toBe(false)
