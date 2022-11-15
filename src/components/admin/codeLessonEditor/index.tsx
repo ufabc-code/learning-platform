@@ -1,14 +1,15 @@
 import { PlusIcon } from '@heroicons/react/24/solid'
+import CodeEditor from 'components/codeEditor'
 import CodeLesson from 'server/entities/codeLesson'
 
 interface CodeLessonEditorProps {
   codeLesson: CodeLesson
-  setCodeLesson: (codeLesson: CodeLesson) => void //QUESTION: pq tava com '?'
+  setCodeLesson: (codeLesson: CodeLesson) => void
 }
 
 export function CodeLessonEditor({
   codeLesson,
-  setCodeLesson
+  setCodeLesson,
 }: CodeLessonEditorProps) {
   function handleAddTest() {
     const updatedLesson = { ...codeLesson }
@@ -17,6 +18,27 @@ export function CodeLessonEditor({
   }
   return (
     <div>
+      <div className="my-2 rounded-lg border p-4">
+        <div>
+          <label
+            htmlFor="text"
+            className="mb-2 block text-sm font-medium text-gray-900"
+          >
+            Enunciado
+          </label>
+          <textarea
+            value={codeLesson.text}
+            onChange={(e) =>
+              setCodeLesson({ ...codeLesson, text: e.target.value })
+            }
+            id="text"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Enunciado"
+            required
+            rows={6}
+          />
+        </div>
+      </div>
       <div className="my-2 rounded-lg border p-4">
         <h1 className="my-2">Solução</h1>
         <div>
@@ -27,19 +49,15 @@ export function CodeLessonEditor({
             >
               Código
             </label>
-            <textarea
-              value={codeLesson.solution.code}
-              rows={20}
-              onChange={(e) =>
+            <CodeEditor
+              code={codeLesson.solution.code}
+              language={codeLesson.solution.language}
+              onchange={(code) =>
                 setCodeLesson({
                   ...codeLesson,
-                  solution: { ...codeLesson.solution, code: e.target.value }
+                  solution: { ...codeLesson.solution, code },
                 })
               }
-              id="title"
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-              placeholder="print('Hello world!')"
-              required
             />
           </div>
           <div>
@@ -95,18 +113,14 @@ export function CodeLessonEditor({
             >
               Código
             </label>
-            <textarea
-              rows={10}
-              value={codeLesson.template.code}
-              onChange={(e) => {
+            <CodeEditor
+              code={codeLesson.template.code}
+              language={codeLesson.template.language}
+              onchange={(code) => {
                 const updatedLesson = { ...codeLesson }
-                updatedLesson.template.code = e.target.value
+                updatedLesson.template.code = code
                 setCodeLesson(updatedLesson)
               }}
-              id="title"
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-              placeholder="print('Hello world!')"
-              required
             />
           </div>
           <div>

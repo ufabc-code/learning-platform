@@ -1,6 +1,8 @@
 import AdminPageBase from 'components/admin/pageBase'
+import useLessonStatistics from 'hooks/useLessonStatistics'
 import type { NextPage } from 'next'
 import Link from 'next/link'
+import { QuizUserAnswer } from 'server/entities/quizUserAnswer'
 import { trpc, client } from 'utils/trpc'
 
 const Courses: NextPage = () => {
@@ -23,8 +25,24 @@ const Courses: NextPage = () => {
     )
   }
 
+  const { lesson, handleEvaluateAnswer, handleSaveAnswers } =
+    useLessonStatistics({
+      courseId: 'f8a7014b-1d59-41ac-b8bd-600afb89c982',
+      moduleId: '0.6705410453243992',
+    })
+
   return (
     <AdminPageBase title="Gerenciar Cursos">
+      <div>
+        <button
+          onClick={() =>
+            handleEvaluateAnswer(new QuizUserAnswer({ alternatives: [0] }))
+          }
+        >
+          Evaluate Answer
+        </button>
+        <button onClick={() => handleSaveAnswers()}>Save Answers</button>
+      </div>
       <div className="flex flex-col">
         <button
           onClick={handleCreateCourse}

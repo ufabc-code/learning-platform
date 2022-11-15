@@ -16,16 +16,17 @@ const jestConfig = createJestConfig({
   coveragePathIgnorePatterns: ['.d.ts', '.spec.ts', '.spec.tsx'],
   preset: 'ts-jest',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  moduleDirectories: ['node_modules', '<rootDir>/'],
+  moduleDirectories: ['node_modules', '<rootDir>/src'],
+  modulePathIgnorePatterns: ['<rootDir>/src/server/providers'],
   testMatch: ['<rootDir>/src/**/*.spec.ts', '<rootDir>/src/**/*.spec.tsx'],
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
-        isolatedModules: true
-      }
+        isolatedModules: true,
+      },
     ],
-  }
+  },
 })
 
 export default jestConfig
