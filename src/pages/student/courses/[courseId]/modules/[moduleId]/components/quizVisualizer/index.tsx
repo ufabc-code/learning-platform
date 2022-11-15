@@ -2,12 +2,18 @@ import MarkdownRender from 'components/markdownRender'
 import StudentQuizAnswer from 'components/student/quizAnswerModal'
 import { useState } from 'react'
 import QuizLesson from 'server/entities/quizLesson'
+import { QuizUserAnswer } from 'server/entities/quizUserAnswer'
+import { CodeUserAnswer } from 'server/entities/codeUserAnswer'
 
 interface QuizVisualizerProps {
   quizLesson: QuizLesson
+  handleEvaluateAnswer: (answer: CodeUserAnswer | QuizUserAnswer) => void
 }
 
-export function QuizVisualizer({ quizLesson }: QuizVisualizerProps) {
+export function QuizVisualizer({
+  quizLesson,
+  handleEvaluateAnswer,
+}: QuizVisualizerProps) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [selectedAlternatives, setSelectedAlternatives] = useState<number[]>([])
 
@@ -21,27 +27,6 @@ export function QuizVisualizer({ quizLesson }: QuizVisualizerProps) {
     } else {
       setSelectedAlternatives([...selectedAlternatives, alternativeId])
     }
-  }
-
-  function validateAnswer() {
-    if (selectedAlternatives.length !== quizLesson.solution.correct.length) {
-      console.log('wrong answer')
-      alert('wrong answer')
-      return
-    }
-
-    const correct = quizLesson.solution.correct.map((alternative) =>
-      selectedAlternatives.includes(alternative),
-    )
-
-    if (!correct) {
-      alert('wrong answer')
-      console.log('wrong answer')
-      return
-    }
-
-    alert('correct answer')
-    console.log('correct answer')
   }
 
   return (
@@ -70,7 +55,11 @@ export function QuizVisualizer({ quizLesson }: QuizVisualizerProps) {
 
       <button
         type="button"
-        onClick={() => validateAnswer()}
+        onClick={() =>
+          handleEvaluateAnswer(
+            new QuizUserAnswer({ alternatives: selectedAlternatives }),
+          )
+        }
         className="mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300"
       >
         Verificar
