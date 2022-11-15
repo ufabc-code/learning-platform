@@ -8,36 +8,42 @@ const quizLesson = (): QuizLesson => {
     text: '',
     alternatives: [
       {
-        text: 'correct-1'
+        text: 'correct-1',
       },
       {
-        text: 'correct-2'
+        text: 'correct-2',
       },
       {
-        text: 'wrong-3'
-      }
+        text: 'wrong-3',
+      },
     ],
     solution: {
       text: '',
-      correct: [0, 1]
-    }
+      correct: [0, 1],
+    },
   }
 }
 
 const correctAnswer = () =>
   new QuizUserAnswer({
-    alternatives: [0, 1]
+    alternatives: [0, 1],
   })
 
-const wrongAnswer = () =>
+const wrongAlternativeSelected = () =>
   new QuizUserAnswer({
-    alternatives: [2]
+    alternatives: [2],
+  })
+
+const missingCorrectAlternative = () =>
+  new QuizUserAnswer({
+    alternatives: [0],
   })
 
 export function createQuizLesson() {
   return {
     lesson: quizLesson,
     correctAnswer,
-    wrongAnswer
+    wrongAlternativeSelected,
+    missingCorrectAlternative,
   }
 }

@@ -10,9 +10,13 @@ export class QuizUserAnswer implements UserAnswer {
 
   async evaluate({ solution }: QuizLesson): Promise<UserAnswerEvaluation> {
     return {
-      correct: this.alternatives.every((alternative) =>
-        solution.correct.includes(alternative)
-      )
+      correct:
+        this.alternatives.every((alternative) =>
+          solution.correct.includes(alternative),
+        ) &&
+        solution.correct.every((correct) =>
+          this.alternatives.includes(correct),
+        ),
     }
   }
 }
