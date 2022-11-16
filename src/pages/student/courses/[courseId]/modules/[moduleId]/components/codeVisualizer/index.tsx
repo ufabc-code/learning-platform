@@ -2,6 +2,7 @@ import { PlayIcon } from '@heroicons/react/24/outline'
 import CodeEditor from 'components/codeEditor'
 import MarkdownRender from 'components/markdownRender'
 import TestCase from 'components/student/courses/[courseId]/modules/[moduleId]/components/codeVisualizer/TestCase'
+import Spinner from 'components/student/courses/[courseId]/modules/[moduleId]/components/Spinner'
 import Tabs from 'components/tabs'
 import { useState } from 'react'
 import CodeLesson from 'server/entities/codeLesson'
@@ -27,29 +28,25 @@ export function CodeVisualizer({
     status: CodeRunnerStatus.OK,
     output: '',
   })
+  const [codeRunning, setCodeRunning] = useState(false)
   const { mutate: runCode } = trpc.useMutation('runCode.run')
-
   const languages = ['c++', 'javascript', 'python']
 
   async function handleRunCode() {
+    setCodeRunning(true)
     runCode(
       {
-        code: JSON.stringify({
-          status: {
-            'input-1': CodeRunnerStatus.OK,
-            'input-2': CodeRunnerStatus.OK,
-          },
-          outputs: {
-            'input-1': 'correct-output-1',
-            'input-2': 'correct-output-2',
-          },
-        }),
+        code,
         language,
-        input: 'input-1',
+        input: stdin,
       },
       {
         onSuccess: (data) => {
           setResult(data)
+          setCodeRunning(false)
+        },
+        onError: () => {
+          setCodeRunning(false)
         },
       },
     )
@@ -86,10 +83,26 @@ export function CodeVisualizer({
 
                       <button
                         onClick={() => handleRunCode()}
-                        className="flex items-center rounded-lg border py-2 px-4 text-green-500 hover:border-green-100 hover:bg-green-100"
+                        className={`flex w-44 items-center rounded-lg border py-2 px-4 ${
+                          codeRunning
+                            ? 'cursor-not-allowed text-blue-300'
+                            : 'text-green-500 hover:border-green-100 hover:bg-green-100'
+                        }`}
+                        disabled={codeRunning}
                       >
-                        <PlayIcon className="h-6 w-6" />
-                        <span className="ml-2">Executar</span>
+                        {codeRunning ? (
+                          <>
+                            <span>
+                              <Spinner className="h-6 w-6" />
+                            </span>
+                            <span className="ml-2">Executando...</span>
+                          </>
+                        ) : (
+                          <>
+                            <PlayIcon className="mr-4 h-6 w-6" />
+                            <span className="ml-2">Executar</span>
+                          </>
+                        )}
                       </button>
                     </div>
                     <CodeEditor
