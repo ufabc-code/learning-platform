@@ -6,8 +6,8 @@
     "modules": [
       {
         "id": "0.6705410453243992",
-        "title": "variaveis",
-        "description": "ensina variaveis",
+        "title": "## Variáveis",
+        "description": "### Este módulo você irá aprender sobre variáveis",
         "lessons": [
           {
             "id": "0.15750786643702486",
