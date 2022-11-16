@@ -3,7 +3,6 @@
  */
 
 import { renderHook } from '@testing-library/react'
-import { trpc } from 'utils/trpc'
 
 jest.mock('utils/trpc', () => ({
   trpc: {
@@ -67,7 +66,7 @@ describe('useLessonStatistics', () => {
       useLessonStatistics({ courseId: '1234', moduleId: '1234' }),
     )
 
-    expect(result.current.lesson).toMatchObject({
+    expect(result.current.lessonToDo).toMatchObject({
       id: '1234',
       type: 'code',
       solution: {

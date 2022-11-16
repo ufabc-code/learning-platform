@@ -15,7 +15,7 @@ export interface UserModuleAnswer {
 class EvaluateModuleService {
   constructor(
     private evaluateLessonService: EvaluateLessonService,
-    private userAnswerStatisticRepository: IUserAnswerStatisticRepository
+    private userAnswerStatisticRepository: IUserAnswerStatisticRepository,
   ) {}
 
   async execute({ user, lessonStatistics }: UserModuleAnswer) {
@@ -26,33 +26,31 @@ class EvaluateModuleService {
     const lessonResults = await Promise.all(
       lessonStatistics.map(({ answer }) => {
         return this.evaluateLessonService.execute(answer)
-      })
+      }),
     )
 
     if (lessonResults.some((lessonResult) => !lessonResult.correct)) {
       return {
         correct: false,
-        message: 'Not all lessons are correct'
+        message: 'Not all lessons are correct',
       }
     }
 
-    await Promise.all(
-      lessonStatistics.map(async ({ attempts, answer }) => {
-        await this.userAnswerStatisticRepository.save(
-          new UserAnswerStatistic({
-            userId: user.id,
-            courseId: answer.courseId,
-            moduleId: answer.moduleId,
-            lessonId: answer.lessonId,
-            updatedAt: new Date(),
-            attempts
-          })
-        )
-      })
-    )
+    for (const { attempts, answer } of lessonStatistics) {
+      await this.userAnswerStatisticRepository.save(
+        new UserAnswerStatistic({
+          userId: user.id,
+          courseId: answer.courseId,
+          moduleId: answer.moduleId,
+          lessonId: answer.lessonId,
+          updatedAt: new Date(),
+          attempts,
+        }),
+      )
+    }
 
     return {
-      correct: true
+      correct: true,
     }
   }
 }
