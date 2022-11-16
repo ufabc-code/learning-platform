@@ -1,16 +1,22 @@
-import { PlayIcon } from '@heroicons/react/24/outline'
-import CodeEditor from 'components/codeEditor'
-import MarkdownRender from 'components/markdownRender'
-import TestCase from 'components/student/courses/[courseId]/modules/[moduleId]/codeVisualizer/testCase'
-import Spinner from 'components/spinner'
 import Tabs from 'components/tabs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CodeLesson from 'server/entities/codeLesson'
 import {
   CodeRunnerStatus,
   ICodeRunnerResult,
 } from 'server/providers/codeRunner/iCodeRunner'
 import { trpc } from 'utils/trpc'
+import ExerciseSection from './exerciseSection'
+import SolutionSection from './solutionSection'
+import TestsSection from './testsSection'
+
+interface Result {
+  loading: boolean
+  result: {
+    output: string
+    status: 'Accepted' | 'Wrong Answer' | 'Error' | ''
+  }
+}
 
 interface CodeVisualizerProps {
   codeLesson: CodeLesson
@@ -29,27 +35,162 @@ export function CodeVisualizer({
     output: '',
   })
   const [codeRunning, setCodeRunning] = useState(false)
-  const { mutate: runCode } = trpc.useMutation('runCode.run')
+  const [progress, setProgress] = useState(0)
+  const [results, setResults] = useState<Result[]>([])
+
   const languages = ['c++', 'javascript', 'python']
+
+  useEffect(() => {
+    setResults(
+      codeLesson.tests.map(() => ({
+        loading: false,
+        result: {
+          output: '',
+          status: '',
+        },
+      })),
+    )
+  }, [codeLesson.tests])
+
+  async function runCode({
+    code,
+    language,
+    input,
+  }: {
+    code: string
+    language: string
+    input: string
+  }): Promise<ICodeRunnerResult> {
+    const client = trpc.createClient({
+      url: '/api/trpc',
+    })
+
+    return await client.mutation('runCode.run', {
+      code,
+      language,
+      input,
+    })
+  }
 
   async function handleRunCode() {
     setCodeRunning(true)
-    runCode(
-      {
+    setResult(await runCode({ code, language, input: stdin }))
+    setCodeRunning(false)
+  }
+
+  function getVerdict({
+    stdout,
+    errorMessage,
+    expectedOutput,
+  }: {
+    stdout: string
+    errorMessage: string
+    expectedOutput: string
+  }): 'Accepted' | 'Wrong Answer' | 'Error' | '' {
+    if (errorMessage) {
+      return 'Error'
+    }
+
+    const linesStdout: string[] = stdout
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+
+    const linesExpectedOutput: string[] = expectedOutput
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+
+    if (linesStdout.length !== linesExpectedOutput.length) {
+      return 'Wrong Answer'
+    }
+
+    for (let i = 0; i < linesStdout.length; i++) {
+      if (linesStdout[i] !== linesExpectedOutput[i]) {
+        return 'Wrong Answer'
+      }
+    }
+
+    return 'Accepted'
+  }
+
+  async function runTest(
+    test: { input: string; expectedOutput: string },
+    testId: number,
+  ) {
+    const progressPerTest = 100 / codeLesson.tests.length
+    try {
+      const executionResult = await runCode({
         code,
         language,
-        input: stdin,
+        input: test.input,
+      })
+
+      setProgress((progress) => progress + progressPerTest / 2)
+
+      setResults((prevResults) => {
+        prevResults[testId] = {
+          loading: false,
+          result: {
+            output:
+              executionResult.output + '\n' + (executionResult.stderr || ''),
+            status: getVerdict({
+              stdout: executionResult.output,
+              errorMessage: executionResult.stderr || '',
+              expectedOutput: test.expectedOutput,
+            }),
+          },
+        }
+        return [...prevResults]
+      })
+    } catch (error) {
+      setProgress((progress) => progress + progressPerTest / 2)
+      setResults((prevResults) => {
+        prevResults[testId] = {
+          loading: false,
+          result: {
+            output: 'Unknown Error',
+            status: 'Error',
+          },
+        }
+        return [...prevResults]
+      })
+    }
+  }
+
+  function getEmptyResult(loading = false): Result {
+    const result: Result = {
+      loading,
+      result: {
+        output: '',
+        status: '',
       },
-      {
-        onSuccess: (data) => {
-          setResult(data)
-          setCodeRunning(false)
-        },
-        onError: () => {
-          setCodeRunning(false)
-        },
-      },
-    )
+    }
+    return result
+  }
+
+  function handleRunTests() {
+    setProgress(0)
+    const newResults = []
+    for (let i = 0; i < codeLesson.tests.length; i++) {
+      newResults.push(getEmptyResult(true))
+    }
+    setResults(newResults)
+
+    const progressPerTest = 100 / codeLesson.tests.length
+    for (let id = 0; id < codeLesson.tests.length; id++) {
+      setProgress((progress) => progress + progressPerTest / 2)
+      const test = codeLesson.tests[id]
+      if (test) {
+        runTest(
+          {
+            input: test.input,
+            expectedOutput: test.expected,
+          },
+          id,
+        )
+      }
+    }
   }
 
   return (
@@ -61,124 +202,35 @@ export function CodeVisualizer({
             {
               name: 'Exercício',
               children: (
-                <div className="grid grid-cols-2 gap-4">
-                  <MarkdownRender content={codeLesson.text} />
-                  <div>
-                    <div className="mb-4 flex justify-between">
-                      <select
-                        id="language"
-                        className="rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900"
-                        value={language}
-                        onChange={(e) => {
-                          setLanguage(e.target.value)
-                        }}
-                      >
-                        <option value={''}>Escolha uma linguagem</option>
-                        {languages.map((language, index) => (
-                          <option key={index} value={language}>
-                            {language}
-                          </option>
-                        ))}
-                      </select>
-
-                      <button
-                        onClick={() => handleRunCode()}
-                        className={`flex w-44 items-center rounded-lg border py-2 px-4 ${
-                          codeRunning
-                            ? 'cursor-not-allowed text-blue-300'
-                            : 'text-green-500 hover:border-green-100 hover:bg-green-100'
-                        }`}
-                        disabled={codeRunning}
-                      >
-                        {codeRunning ? (
-                          <>
-                            <span>
-                              <Spinner className="h-6 w-6" />
-                            </span>
-                            <span className="ml-2">Executando...</span>
-                          </>
-                        ) : (
-                          <>
-                            <PlayIcon className="mr-4 h-6 w-6" />
-                            <span className="ml-2">Executar</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                    <CodeEditor
-                      code={code}
-                      language={language}
-                      onchange={(code) => {
-                        setCode(code)
-                      }}
-                      className="h-80"
-                    />
-                    <div className="mt-4 grid grid-cols-2 gap-4">
-                      <div>
-                        <label
-                          htmlFor="stdin"
-                          className="mb-2 block text-sm font-medium text-gray-900"
-                        >
-                          Entrada
-                        </label>
-                        <textarea
-                          id="stdin"
-                          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 font-mono text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                          value={stdin}
-                          onChange={(e) => {
-                            setStdin(e.target.value)
-                          }}
-                          rows={3}
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="stdout"
-                          className="mb-2 block text-sm font-medium text-gray-900"
-                        >
-                          Saída
-                        </label>
-                        <textarea
-                          id="stdout"
-                          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 font-mono text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                          value={result.output}
-                          disabled={true}
-                          rows={3}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ExerciseSection
+                  codeLesson={codeLesson}
+                  language={language}
+                  setLanguage={setLanguage}
+                  languages={languages}
+                  codeRunning={codeRunning}
+                  stdin={stdin}
+                  code={code}
+                  setCode={setCode}
+                  handleRunCode={handleRunCode}
+                  result={result}
+                  setStdin={setStdin}
+                />
               ),
             },
             {
               name: 'Testes',
               children: (
-                <div className="grid grid-cols-1 gap-4 pb-4">
-                  {codeLesson.tests.map((test, index) => (
-                    <TestCase
-                      key={index}
-                      label={`Teste #${index + 1}`}
-                      test={test}
-                    />
-                  ))}
-                </div>
+                <TestsSection
+                  progress={progress}
+                  results={results}
+                  handleRunTests={handleRunTests}
+                  codeLesson={codeLesson}
+                />
               ),
             },
             {
               name: 'Solução',
-              children: (
-                <div className="grid grid-cols-2 gap-4">
-                  <MarkdownRender content={codeLesson.solution.text} />
-                  <div>
-                    <CodeEditor
-                      code={codeLesson.solution.code}
-                      language={codeLesson.solution.language}
-                      className="h-96"
-                    />
-                  </div>
-                </div>
-              ),
+              children: <SolutionSection codeLesson={codeLesson} />,
             },
           ]}
         />

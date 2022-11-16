@@ -1,6 +1,5 @@
 import FinishModuleCongratulation from 'components/student/courses/[courseId]/modules/[moduleId]/finishModuleCongratulation'
 import ProgressBar from 'components/progressBar'
-import Spinner from 'components/spinner'
 import useLessonStatistics from 'hooks/useLessonStatistics'
 import { useRouter } from 'next/router'
 import CodeLesson from 'server/entities/codeLesson'
