@@ -6,19 +6,20 @@ import { QueryClientProvider } from 'react-query'
 import { ToastProvider, ToastSection } from 'components/toast'
 import '../styles/globals.css'
 
+export const trpcClient = trpc.createClient({
+  url: '/api/trpc',
+  headers() {
+    const token = localStorage.getItem('token') || ''
+    return {
+      Authorization: `Bearer ${token}`,
+    }
+  },
+})
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  const trpcClient = trpc.createClient({
-    url: '/api/trpc',
-    headers() {
-      const token = localStorage.getItem('token') || ''
-      return {
-        Authorization: `Bearer ${token}`,
-      }
-    },
-  })
   return (
     <ToastProvider>
       <ToastSection />
