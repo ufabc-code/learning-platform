@@ -85,7 +85,7 @@ function Course(user?: User, userAnswerStatistic?: UserAnswerStatistic[]) {
         <div className="max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-md">
           {course.modules.map((module) => (
             <>
-              <div className="flex bg-slate-700">
+              <div className="flex">
                 <h5>
                   <MarkdownRender content={module.title} />
                 </h5>
