@@ -39,7 +39,6 @@ class GetLessonsToRememberService {
           courseId,
           lessonId: userAnswerStatistic.lessonId,
           moduleId: userAnswerStatistic.moduleId,
-          attempts: userAnswerStatistic.attempts,
         }
       })
 
