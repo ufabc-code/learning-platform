@@ -1,33 +1,28 @@
-import { SessionProvider } from 'next-auth/react'
-import type { AppType } from 'next/app'
-import type { Session } from 'next-auth'
 import { trpc, client } from 'utils/trpc'
 import { QueryClientProvider } from 'react-query'
 import { ToastProvider, ToastSection } from 'components/toast'
 import '../styles/globals.css'
+import { AppType } from 'next/app'
 
-export const trpcClient = trpc.createClient({
-  url: '/api/trpc',
-  headers() {
-    const token = localStorage.getItem('token') || ''
-    return {
-      Authorization: `Bearer ${token}`,
-    }
-  },
-})
-
-const MyApp: AppType<{ session: Session | null }> = ({
+const MyApp: AppType = ({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps,
 }) => {
+  const trpcClient = trpc.createClient({
+    url: '/api/trpc',
+    headers() {
+      const token = localStorage.getItem('token') || ''
+      return {
+        Authorization: `Bearer ${token}`,
+      }
+    },
+  })
   return (
     <ToastProvider>
       <ToastSection />
       <trpc.Provider client={trpcClient} queryClient={client}>
         <QueryClientProvider client={client}>
-          <SessionProvider session={session}>
             <Component {...pageProps} />
-          </SessionProvider>
         </QueryClientProvider>
       </trpc.Provider>
     </ToastProvider>

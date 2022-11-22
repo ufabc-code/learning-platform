@@ -1,4 +1,3 @@
-import { trpcClient } from 'pages/_app'
 import { useEffect, useRef, useState } from 'react'
 import Lesson from 'server/entities/lesson'
 import Module from 'server/entities/module'
@@ -59,7 +58,7 @@ const useLessonStatistics = ({
         const { modules } = data
         const lessons = modules.find(({ id }) => id === moduleId)?.lessons || []
 
-        const lessonsToRemember = await trpcClient.query(
+        const lessonsToRemember = await trpc.useContext().client.query(
           'lessonsToRemember.get',
           {
             courseId,
