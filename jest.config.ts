@@ -12,13 +12,13 @@ const jestConfig = createJestConfig({
   clearMocks: true,
   coverageProvider: 'v8',
   collectCoverage: true,
-  collectCoverageFrom: ['<rootDir>/src/**/*.{ts,tsx}'],
-  coveragePathIgnorePatterns: ['.d.ts', '.spec.ts', '.spec.tsx'],
+  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  coveragePathIgnorePatterns: ['.d.ts', '.spec.ts'],
   preset: 'ts-jest',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleDirectories: ['node_modules', '<rootDir>/src'],
   modulePathIgnorePatterns: ['<rootDir>/src/server/providers'],
-  testMatch: ['<rootDir>/src/**/*.spec.ts', '<rootDir>/src/**/*.spec.tsx'],
+  testMatch: ['<rootDir>/src/**/*.spec.ts'],
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',
