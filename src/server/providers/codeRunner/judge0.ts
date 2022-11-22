@@ -50,12 +50,22 @@ class Judge0 implements ICodeRunner {
     const result: ICodeRunnerResult = {
       output: this.decodeBase64(judge0Result.stdout),
       status: this.statusMap[judge0Result.status.id] || CodeRunnerStatus.ERROR,
-      stderr:
-        this.decodeBase64(judge0Result.stderr) +
-        '\n' +
+      stderr: this.joinErrors([
+        this.decodeBase64(judge0Result.stderr),
         this.decodeBase64(judge0Result.compile_output),
+      ]),
     }
 
+    return result
+  }
+
+  private joinErrors(errors: string[]): string {
+    let result = ''
+    for (const error of errors) {
+      if (error) {
+        result += error + '\n'
+      }
+    }
     return result
   }
 
