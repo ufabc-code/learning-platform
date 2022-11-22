@@ -16,6 +16,7 @@ const useLessonStatistics = ({
   const [examRunning, setExamRunning] = useState(false)
   const [numberOfLessons, setNumberOfLessons] = useState(0)
   const [savingAnswers, setSavingAnswers] = useState(false)
+  const trpcClient = trpc.useContext().client
 
   const statistics = useRef<
     Record<
@@ -58,7 +59,7 @@ const useLessonStatistics = ({
         const { modules } = data
         const lessons = modules.find(({ id }) => id === moduleId)?.lessons || []
 
-        const lessonsToRemember = await trpc.useContext().client.query(
+        const lessonsToRemember = await trpcClient.query(
           'lessonsToRemember.get',
           {
             courseId,
@@ -76,7 +77,7 @@ const useLessonStatistics = ({
       }
     }
     fetchLessons()
-  }, [courseId, moduleId, data, lessons.length, examRunning])
+  }, [courseId, moduleId, data, lessons.length, examRunning, trpcClient])
 
   // save answer
   useEffect(() => {
