@@ -18,8 +18,6 @@ const useLessonStatistics = ({
   const [savingAnswers, setSavingAnswers] = useState(false)
   const trpcClient = trpc.useContext().client
 
-  const trpcClient = trpc.useContext().client;
-
   const statistics = useRef<
     Record<
       string,
