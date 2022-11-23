@@ -5,7 +5,13 @@ module.exports = {
     "./node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        flowbite:{
+          blue: "#1c65f2"
+        }
+      }
+    },
   },
   plugins: [
     require('@tailwindcss/typography'),
