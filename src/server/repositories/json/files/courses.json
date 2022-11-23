@@ -43,5 +43,50 @@
       }
     ],
     "slug": "curso-python"
+  },
+  {
+    "id": "f8a7014b-1d59-41ac-b8bd-600afb89c982",
+    "title": "Curso de Java",
+    "description": "este curso ensina java",
+    "modules": [
+      {
+        "id": "0.6705410453243992",
+        "title": "## Variáveis",
+        "description": "### Este módulo você irá aprender sobre variáveis",
+        "lessons": [
+          {
+            "id": "0.15750786643702486",
+            "type": "code",
+            "solution": {
+              "text": "esta é uma explicação",
+              "code": "name = input()\nprint(name)",
+              "language": "python"
+            },
+            "template": { "code": "name = input()", "language": "python" },
+            "tests": [
+              { "input": "ola", "expected": "ola\n" },
+              { "input": "mundo", "expected": "mundo\n" }
+            ],
+            "text": "# Titulo Aleatorio\n\nEnunciado do exercicio. Abaixo uma tabela\n\nExemplo   | Valor do exemplo\n--------- | ------\nExemplo 1 | R$ 10\nExemplo 2 | R$ 8\nExemplo 3 | R$ 7\n\n"
+          },
+          {
+            "id": "0.172244008144258",
+            "type": "quiz",
+            "text": "# Este é um quiz\n\naqui é um texto\nisso também é um texto\n\nSelecione as duas alternativas corretas",
+            "alternatives": [
+              { "text": "Alternativa 1" },
+              { "text": "Alternativa 2" },
+              { "text": "Errada 1\n\nAlternativa aceita markdown também" },
+              { "text": "Errada 2 " }
+            ],
+            "solution": {
+              "text": "correta é a 1 e 2\n\n## isto é markdown também",
+              "correct": [0, 1]
+            }
+          }
+        ]
+      }
+    ],
+    "slug": "curso-python"
   }
 ]
