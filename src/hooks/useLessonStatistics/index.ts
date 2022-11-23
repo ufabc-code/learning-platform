@@ -16,6 +16,7 @@ const useLessonStatistics = ({
   const [examRunning, setExamRunning] = useState(false)
   const [numberOfLessons, setNumberOfLessons] = useState(0)
   const [savingAnswers, setSavingAnswers] = useState(false)
+  const trpcClient = trpc.useContext().client
 
   const trpcClient = trpc.useContext().client;
 

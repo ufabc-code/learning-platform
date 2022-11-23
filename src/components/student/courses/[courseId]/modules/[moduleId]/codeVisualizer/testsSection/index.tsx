@@ -1,6 +1,6 @@
 import ProgressBar from 'components/progressBar'
-import TestCase from 'components/student/courses/[courseId]/modules/[moduleId]/codeVisualizer/testCase'
 import CodeLesson from 'server/entities/codeLesson'
+import TestCase from './testCase'
 
 interface Result {
   loading: boolean
