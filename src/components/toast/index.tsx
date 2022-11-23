@@ -1,9 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react'
-import {
-  ArrowPathIcon,
-  CheckCircleIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
+import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import Spinner from 'components/spinner'
 
 interface Notification {
   _id?: number
@@ -66,9 +63,14 @@ export const icons = {
     svg: <CheckCircleIcon className="h-7 w-7" />,
   },
   loading: {
-    color: 'text-sky-500',
-    background: 'bg-sky-100',
-    svg: <ArrowPathIcon className="h-7 w-7" />,
+    color: '',
+    background: '',
+    svg: <Spinner className="h-7 w-7" />,
+  },
+  error: {
+    color: 'text-red-500',
+    background: 'bg-red-100',
+    svg: <XMarkIcon className="h-7 w-7" />,
   },
 }
 

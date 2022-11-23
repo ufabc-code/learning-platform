@@ -1,20 +1,13 @@
-import { useEffect, useState } from 'react'
-
 interface TabsProps {
-  active: number
+  activeTab: number
   tabs: Array<{
     children: React.ReactNode
     name: string
   }>
+  setActiveTab: (index: number) => void
 }
 
-function Tabs({ tabs, active }: TabsProps) {
-  const [activeTab, setActiveTab] = useState(active)
-
-  useEffect(() => {
-    setActiveTab(active)
-  }, [active])
-
+function Tabs({ tabs, activeTab, setActiveTab }: TabsProps) {
   return (
     <div>
       <div className="mb-4 border-b border-gray-200 text-center text-sm font-medium text-gray-500">
