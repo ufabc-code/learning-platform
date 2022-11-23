@@ -1,0 +1,18 @@
+[
+  {
+    "userId": "e0c9c733-86e6-47e9-9051-82f3099aee0c",
+    "courseId": "f8a7014b-1d59-41ac-b8bd-600afb89c982",
+    "moduleId": "0.6705410453243992",
+    "lessonId": "0.15750786643702486",
+    "attempts": 2,
+    "updatedAt": "2022-11-16T12:17:34.237Z"
+  },
+  {
+    "userId": "e0c9c733-86e6-47e9-9051-82f3099aee0c",
+    "courseId": "f8a7014b-1d59-41ac-b8bd-600afb89c982",
+    "moduleId": "0.6705410453243992",
+    "lessonId": "0.172244008144258",
+    "attempts": 1,
+    "updatedAt": "2022-11-16T12:17:34.237Z"
+  }
+]

@@ -1,3 +1,4 @@
+import FinishModuleCongratulation from 'components/student/courses/[courseId]/modules/[moduleId]/finishModuleCongratulation'
 import Tabs from 'components/tabs'
 import { useToast, icons } from 'components/toast'
 import type { NextPage } from 'next'
@@ -15,13 +16,13 @@ const AppContent = () => {
         title: '',
         description: '',
         modules: [],
-        slug: ''
+        slug: '',
       },
       {
         onSuccess: () => {
           client.invalidateQueries(['courses.getAll'])
-        }
-      }
+        },
+      },
     )
   }
 
@@ -31,7 +32,6 @@ const AppContent = () => {
         <button onClick={handleCreateCourse} className="bg-red-500 p-4">
           Create course
         </button>
-
         <button
           onClick={() => {
             addToast({ icon: icons.success, message: 'Success' })
@@ -49,16 +49,16 @@ const AppContent = () => {
           tabs={[
             {
               name: 'Tab 1',
-              children: <div>Tab 1 content</div>
+              children: <div>Tab 1 content</div>,
             },
             {
               name: 'Tab 2',
-              children: <div>Tab 2 content</div>
+              children: <div>Tab 2 content</div>,
             },
             {
               name: 'Tab 3',
-              children: <div>Tab 3 content</div>
-            }
+              children: <div>Tab 3 content</div>,
+            },
           ]}
         />
       </div>
