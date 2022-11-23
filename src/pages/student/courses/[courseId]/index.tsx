@@ -4,7 +4,11 @@ import { trpc } from 'utils/trpc'
 import User from 'server/entities/user'
 import UserAnswerStatistic from 'server/entities/userAnswerStatistic'
 
-function Course(user?: User, userAnswerStatistic?: UserAnswerStatistic[]) {
+type CourseProps = {
+  user?: User;
+  userAnswerStatistic?: UserAnswerStatistic[]
+}
+function Course({user, userAnswerStatistic }: CourseProps ) {
   const router = useRouter()
   const { courseId } = router.query
 
@@ -16,17 +20,14 @@ function Course(user?: User, userAnswerStatistic?: UserAnswerStatistic[]) {
   const isModuleCompleteIcon = true
 
   function isModuleCompleted() {
-    if (userAnswerStatistic == undefined) return false
-    //verificar se o modulo está entre os que o usuario ja respondeu
-    const userAnswerStatisticFiltered = userAnswerStatistic.filter(
+    const userAnswerStatisticFiltered = userAnswerStatistic?.find(
       (el) => el.moduleId == module.id && el.attempts > 0,
     )
-
-    return userAnswerStatisticFiltered.length > 0
+    return !!userAnswerStatisticFiltered
   }
 
   function isModuleCompletedIcon(): JSX.Element {
-    if (user == undefined || course == undefined)
+    if (!user || !course)
       return (
         <svg
           className="mr-2 h-5 w-5 shrink-0"
@@ -102,7 +103,6 @@ function Course(user?: User, userAnswerStatistic?: UserAnswerStatistic[]) {
                 <div className="w-1/6 py-1">
                   <a
                     href={`/student/courses/${courseId}/modules/${module.id}`}
-                    key={course.id}
                     className="flex rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
                   >
                     <svg
