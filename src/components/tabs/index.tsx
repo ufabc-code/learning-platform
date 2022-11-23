@@ -17,7 +17,7 @@ function Tabs({ tabs, active }: TabsProps) {
 
   return (
     <div>
-      <div className="mb-4 rounded-sm border-b border-gray-200 bg-white pb-2 text-center text-sm font-medium text-gray-500">
+      <div className="mb-4 border-b border-gray-200 text-center text-sm font-medium text-gray-500">
         <div className="-mb-px flex flex-wrap">
           {tabs.map(({ name }, index) => (
             <button
