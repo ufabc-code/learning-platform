@@ -1,15 +1,18 @@
-import ProgressBar from 'components/student/courses/[courseId]/modules/[moduleId]/components/ProgressBar'
-import Spinner from 'components/student/courses/[courseId]/modules/[moduleId]/components/Spinner'
+import FinishModuleCongratulation from 'components/student/courses/[courseId]/modules/[moduleId]/finishModuleCongratulation'
+import ProgressBar from 'components/progressBar'
 import useLessonStatistics from 'hooks/useLessonStatistics'
 import { useRouter } from 'next/router'
 import CodeLesson from 'server/entities/codeLesson'
 import QuizLesson from 'server/entities/quizLesson'
-import { CodeVisualizer } from './components/codeVisualizer'
-import { QuizVisualizer } from './components/quizVisualizer'
+import { QuizVisualizer } from 'components/student/courses/[courseId]/modules/[moduleId]/quizVisualizer'
+import { CodeVisualizer } from 'components/student/courses/[courseId]/modules/[moduleId]/codeVisualizer'
 
 function ModuleVisualizer() {
   const router = useRouter()
-  const { courseId, moduleId } = router.query
+  const { courseId = '', moduleId = '' } = router.query as {
+    courseId: string
+    moduleId: string
+  }
 
   const {
     handleEvaluateAnswer,
@@ -19,8 +22,8 @@ function ModuleVisualizer() {
     remainingLessons,
     savingAnswers,
   } = useLessonStatistics({
-    courseId: (courseId as string) || '',
-    moduleId: (moduleId as string) || '',
+    courseId: courseId,
+    moduleId: moduleId,
   })
 
   if (!examRunning) {
@@ -29,31 +32,7 @@ function ModuleVisualizer() {
 
   if (!lessonToDo) {
     return (
-      <div>
-        <h1>Parbéns você completou este módulo</h1>
-
-        {savingAnswers && (
-          <div>
-            <h3 className="text-xl">Estamos salvando suas respostas</h3>
-            <Spinner />
-          </div>
-        )}
-
-        <button
-          type="button"
-          className={`rounded-lg px-5 py-2.5  text-center text-sm font-medium text-white ${
-            savingAnswers
-              ? 'cursor-not-allowed bg-blue-200'
-              : 'bg-blue-700 hover:bg-blue-800 '
-          }`}
-          disabled={savingAnswers}
-          onClick={() => {
-            router.push(`/student/courses/${courseId}`)
-          }}
-        >
-          Ir para home
-        </button>
-      </div>
+      <FinishModuleCongratulation loading={savingAnswers} courseId={courseId} />
     )
   }
 

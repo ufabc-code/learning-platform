@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Lesson from 'server/entities/lesson'
+import Module from 'server/entities/module'
 import { trpc } from 'utils/trpc'
 
 type UseLessonStatisticsProps = { courseId: string; moduleId: string }
@@ -15,6 +16,7 @@ const useLessonStatistics = ({
   const [examRunning, setExamRunning] = useState(false)
   const [numberOfLessons, setNumberOfLessons] = useState(0)
   const [savingAnswers, setSavingAnswers] = useState(false)
+  const trpcClient = trpc.useContext().client
 
   const statistics = useRef<
     Record<
@@ -26,16 +28,56 @@ const useLessonStatistics = ({
     >
   >({})
 
-  useEffect(() => {
-    if (data && lessons.length === 0 && !examRunning) {
-      const { modules } = data
-      const lessons = modules.find(({ id }) => id === moduleId)?.lessons || []
-
-      setLessons(lessons)
-      setNumberOfLessons(lessons.length)
-      setExamRunning(true)
+  function getLessonsToRemember(
+    lessonsToRemember: {
+      courseId: string
+      lessonId: string
+      moduleId: string
+    }[],
+    modules: Module[],
+  ) {
+    const lessons = []
+    for (const lessonToRemember of lessonsToRemember) {
+      const currentModule = modules.find(
+        ({ id }) => id === lessonToRemember.moduleId,
+      )
+      if (currentModule) {
+        const lesson = currentModule.lessons.find(
+          (lesson) => lesson.id === lessonToRemember.lessonId,
+        )
+        if (lesson) {
+          lessons.push(lesson)
+        }
+      }
     }
-  }, [courseId, moduleId, data, lessons.length, examRunning])
+    return lessons
+  }
+
+  useEffect(() => {
+    async function fetchLessons() {
+      if (data && lessons.length === 0 && !examRunning) {
+        const { modules } = data
+        const lessons = modules.find(({ id }) => id === moduleId)?.lessons || []
+
+        const lessonsToRemember = await trpcClient.query(
+          'lessonsToRemember.get',
+          {
+            courseId,
+          },
+        )
+
+        const lessonsToDo = [
+          ...getLessonsToRemember(lessonsToRemember, modules),
+          ...lessons,
+        ]
+
+        setLessons(lessonsToDo)
+        setNumberOfLessons(lessonsToDo.length)
+        setExamRunning(true)
+      }
+    }
+    fetchLessons()
+  }, [courseId, moduleId, data, lessons.length, examRunning, trpcClient])
 
   // save answer
   useEffect(() => {
