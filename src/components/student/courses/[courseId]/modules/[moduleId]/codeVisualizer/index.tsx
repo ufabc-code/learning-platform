@@ -1,4 +1,5 @@
 import Tabs from 'components/tabs'
+import { icons, useToast } from 'components/toast'
 import { useEffect, useState } from 'react'
 import CodeLesson from 'server/entities/codeLesson'
 import {
@@ -20,12 +21,19 @@ interface Result {
 
 interface CodeVisualizerProps {
   codeLesson: CodeLesson
-  handleEvaluateAnswer: (answer: { code: string; language: string }) => void
+  handleEvaluateAnswer: (answer: {
+    code: string
+    language: string
+  }) => Promise<boolean>
+  markQuestionAsSolved: () => void
+  markQuestionAsUnsolved: () => void
 }
 
 export function CodeVisualizer({
   codeLesson,
   handleEvaluateAnswer,
+  markQuestionAsSolved,
+  markQuestionAsUnsolved,
 }: CodeVisualizerProps) {
   const [code, setCode] = useState(codeLesson.template.code)
   const [language, setLanguage] = useState(codeLesson.template.language)
@@ -37,6 +45,12 @@ export function CodeVisualizer({
   const [codeRunning, setCodeRunning] = useState(false)
   const [progress, setProgress] = useState(0)
   const [results, setResults] = useState<Result[]>([])
+  const [activeTab, setActiveTab] = useState(0)
+  const [correctAnswer, setCorrectAnswer] = useState<undefined | boolean>(
+    undefined,
+  )
+
+  const { addToast } = useToast()
 
   const languages = ['c++', 'javascript', 'python']
 
@@ -193,11 +207,41 @@ export function CodeVisualizer({
     }
   }
 
+  async function handleEvaluateCodeAnswer() {
+    addToast({
+      message: 'Avaliando código...',
+      icon: icons.loading,
+    })
+    const result = await handleEvaluateAnswer({ code, language })
+    setCorrectAnswer(result)
+    setActiveTab(2)
+    if (result) {
+      addToast({
+        message: 'Respota correta!',
+        icon: icons.success,
+      })
+    } else {
+      addToast({
+        message: 'Resposta incorreta',
+        icon: icons.error,
+      })
+    }
+  }
+
+  function handleNextQuestion() {
+    if (correctAnswer) {
+      markQuestionAsSolved()
+    } else {
+      markQuestionAsUnsolved()
+    }
+  }
+
   return (
     <div className="m-2 py-2">
       <div>
         <Tabs
-          active={0}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
           tabs={[
             {
               name: 'Exercício',
@@ -236,13 +280,23 @@ export function CodeVisualizer({
         />
       </div>
       <div className="mt-8">
-        <button
-          type="button"
-          onClick={() => handleEvaluateAnswer({ code, language })}
-          className="mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-        >
-          Verificar
-        </button>
+        {correctAnswer === undefined ? (
+          <button
+            type="button"
+            onClick={() => handleEvaluateCodeAnswer()}
+            className="mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          >
+            Verificar
+          </button>
+        ) : (
+          <button
+            className="block rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+            onClick={handleNextQuestion}
+            type="button"
+          >
+            Avançar
+          </button>
+        )}
       </div>
     </div>
   )

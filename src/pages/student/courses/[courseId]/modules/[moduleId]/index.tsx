@@ -21,6 +21,8 @@ function ModuleVisualizer() {
     numberOfLessons,
     remainingLessons,
     savingAnswers,
+    markQuestionAsSolved,
+    markQuestionAsUnsolved,
   } = useLessonStatistics({
     courseId: courseId,
     moduleId: moduleId,
@@ -36,6 +38,19 @@ function ModuleVisualizer() {
     )
   }
 
+  async function handleEvaluateQuizAnswer(answer: {
+    alternatives: number[]
+  }): Promise<boolean> {
+    return await handleEvaluateAnswer(answer)
+  }
+
+  async function handleEvaluateCodeAnswer(answer: {
+    code: string
+    language: string
+  }): Promise<boolean> {
+    return await handleEvaluateAnswer(answer)
+  }
+
   return (
     <div className="p-8">
       <ProgressBar
@@ -47,20 +62,17 @@ function ModuleVisualizer() {
         {lessonToDo.type === 'code' && (
           <CodeVisualizer
             codeLesson={lessonToDo as CodeLesson}
-            handleEvaluateAnswer={(answer: {
-              code: string
-              language: string
-            }) => {
-              handleEvaluateAnswer(answer)
-            }}
+            handleEvaluateAnswer={handleEvaluateCodeAnswer}
+            markQuestionAsSolved={markQuestionAsSolved}
+            markQuestionAsUnsolved={markQuestionAsUnsolved}
           />
         )}
         {lessonToDo.type === 'quiz' && (
           <QuizVisualizer
             quizLesson={lessonToDo as QuizLesson}
-            handleEvaluateAnswer={(answer: { alternatives: number[] }) => {
-              handleEvaluateAnswer(answer)
-            }}
+            handleEvaluateAnswer={handleEvaluateQuizAnswer}
+            markQuestionAsSolved={markQuestionAsSolved}
+            markQuestionAsUnsolved={markQuestionAsUnsolved}
           />
         )}
       </div>
