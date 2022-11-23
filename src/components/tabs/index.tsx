@@ -38,7 +38,7 @@ function Tabs({ tabs, active }: TabsProps) {
         <div
           className="overflow-hidden"
           style={{
-            height: `${index === activeTab ? 'auto' : '0px'}`
+            height: `${index === activeTab ? 'auto' : '0px'}`,
           }}
           key={index}
         >
