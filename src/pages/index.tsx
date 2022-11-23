@@ -6,14 +6,14 @@ import { Button } from 'flowbite-react'
 
 const Home: NextPage = () => {
   return (
-    <div className="h-full bg-gray-800 pt-12  text-white">
+    <div className="h-full pt-12">
       <Container>
         <section>
           <div className="flex justify-center">
             <Image
               src="/undraw_programmer_re_owql.svg"
-              width="578"
-              height="578"
+              width="500"
+              height="500"
               alt="Pessoa programando"
             />
           </div>

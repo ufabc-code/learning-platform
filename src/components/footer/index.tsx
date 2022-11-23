@@ -2,7 +2,7 @@ import { Footer as FlowbiteFooter } from 'flowbite-react'
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white ">
+    <footer className="border-t border-gray-300">
       <div className="flex w-full justify-between p-6">
         <FlowbiteFooter.Copyright
           by="GRUB Learning Platform"
