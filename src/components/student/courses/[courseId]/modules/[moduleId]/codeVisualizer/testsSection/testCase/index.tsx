@@ -62,7 +62,8 @@ export default function TestCase({
               rows={4}
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 font-mono text-sm text-gray-900"
               value={test.input}
-              disabled={true}
+              readOnly
+              disabled
             ></textarea>
           </div>
           <div>
@@ -71,7 +72,8 @@ export default function TestCase({
               rows={4}
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 font-mono text-sm text-gray-900"
               value={test.expected}
-              disabled={true}
+              readOnly
+              disabled
             ></textarea>
           </div>
           <div>
@@ -79,7 +81,8 @@ export default function TestCase({
             <textarea
               rows={4}
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 font-mono text-sm text-gray-900"
-              disabled={true}
+              disabled
+              readOnly
               value={output}
             ></textarea>
           </div>

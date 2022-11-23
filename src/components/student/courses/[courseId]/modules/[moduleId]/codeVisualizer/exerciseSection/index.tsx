@@ -114,7 +114,8 @@ function ExerciseSection({
               id="stdout"
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 font-mono text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               value={result.output}
-              disabled={true}
+              disabled
+              readOnly
               rows={3}
             />
           </div>
