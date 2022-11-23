@@ -2,6 +2,10 @@
   "name": "learning-platform",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "npm": "8.x",
+    "node": "16.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

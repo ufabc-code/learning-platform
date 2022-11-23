@@ -4,8 +4,8 @@ import useLessonStatistics from 'hooks/useLessonStatistics'
 import { useRouter } from 'next/router'
 import CodeLesson from 'server/entities/codeLesson'
 import QuizLesson from 'server/entities/quizLesson'
-import { CodeVisualizer } from './components/codeVisualizer'
-import { QuizVisualizer } from './components/quizVisualizer'
+import { QuizVisualizer } from 'components/student/courses/[courseId]/modules/[moduleId]/quizVisualizer'
+import { CodeVisualizer } from 'components/student/courses/[courseId]/modules/[moduleId]/codeVisualizer'
 
 function ModuleVisualizer() {
   const router = useRouter()
