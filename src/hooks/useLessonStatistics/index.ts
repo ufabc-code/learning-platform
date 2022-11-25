@@ -101,34 +101,45 @@ const useLessonStatistics = ({
 
   const handleEvaluateAnswer = (
     answer: { code: string; language: string } | { alternatives: number[] },
-  ) => {
+  ): Promise<boolean> => {
     const firstElement = lessons[0]
 
     if (lessons && firstElement?.id) {
-      evaluateLesson(
-        { courseId, moduleId, lessonId: firstElement.id, answer },
-        {
-          onSuccess(data) {
-            statistics.current[firstElement.id] = {
-              attempts:
-                Number(statistics.current[firstElement.id]?.attempts || 0) + 1,
-              answer,
-            }
-
-            console.log(statistics.current)
-
-            if (!data.correct) {
-              lessons.push(firstElement)
-            }
-            lessons.shift()
-            setLessons([...lessons])
+      return new Promise((resolve, reject) => {
+        evaluateLesson(
+          { courseId, moduleId, lessonId: firstElement.id, answer },
+          {
+            onSuccess(data) {
+              statistics.current[firstElement.id] = {
+                attempts:
+                  Number(statistics.current[firstElement.id]?.attempts || 0) +
+                  1,
+                answer,
+              }
+              resolve(data.correct)
+            },
+            onError() {
+              reject()
+            },
           },
-          onError() {
-            lessons.shift()
-            setLessons([...lessons])
-          },
-        },
-      )
+        )
+      })
+    } else {
+      return Promise.reject()
+    }
+  }
+
+  const markQuestionAsSolved = () => {
+    lessons.shift()
+    setLessons([...lessons])
+  }
+
+  const markQuestionAsUnsolved = () => {
+    const firstElement = lessons[0]
+    if (firstElement) {
+      lessons.push(firstElement)
+      lessons.shift()
+      setLessons([...lessons])
     }
   }
 
@@ -139,6 +150,8 @@ const useLessonStatistics = ({
     remainingLessons: lessons.length,
     numberOfLessons,
     savingAnswers,
+    markQuestionAsSolved,
+    markQuestionAsUnsolved,
   }
 }
 

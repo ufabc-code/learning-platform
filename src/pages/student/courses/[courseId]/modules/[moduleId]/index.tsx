@@ -6,6 +6,7 @@ import CodeLesson from 'server/entities/codeLesson'
 import QuizLesson from 'server/entities/quizLesson'
 import { QuizVisualizer } from 'components/student/courses/[courseId]/modules/[moduleId]/quizVisualizer'
 import { CodeVisualizer } from 'components/student/courses/[courseId]/modules/[moduleId]/codeVisualizer'
+import Spinner from 'components/spinner'
 
 function ModuleVisualizer() {
   const router = useRouter()
@@ -21,19 +22,39 @@ function ModuleVisualizer() {
     numberOfLessons,
     remainingLessons,
     savingAnswers,
+    markQuestionAsSolved,
+    markQuestionAsUnsolved,
   } = useLessonStatistics({
     courseId: courseId,
     moduleId: moduleId,
   })
 
   if (!examRunning) {
-    return <div>loading exam</div>
+    return (
+      <div className="absolute top-1/2 left-1/2 flex -translate-y-1/2 -translate-x-1/2 flex-col items-center justify-center">
+        <span className="mb-4 text-3xl text-flowbite-blue">Carregando...</span>
+        <Spinner />
+      </div>
+    )
   }
 
   if (!lessonToDo) {
     return (
       <FinishModuleCongratulation loading={savingAnswers} courseId={courseId} />
     )
+  }
+
+  async function handleEvaluateQuizAnswer(answer: {
+    alternatives: number[]
+  }): Promise<boolean> {
+    return await handleEvaluateAnswer(answer)
+  }
+
+  async function handleEvaluateCodeAnswer(answer: {
+    code: string
+    language: string
+  }): Promise<boolean> {
+    return await handleEvaluateAnswer(answer)
   }
 
   return (
@@ -47,20 +68,17 @@ function ModuleVisualizer() {
         {lessonToDo.type === 'code' && (
           <CodeVisualizer
             codeLesson={lessonToDo as CodeLesson}
-            handleEvaluateAnswer={(answer: {
-              code: string
-              language: string
-            }) => {
-              handleEvaluateAnswer(answer)
-            }}
+            handleEvaluateAnswer={handleEvaluateCodeAnswer}
+            markQuestionAsSolved={markQuestionAsSolved}
+            markQuestionAsUnsolved={markQuestionAsUnsolved}
           />
         )}
         {lessonToDo.type === 'quiz' && (
           <QuizVisualizer
             quizLesson={lessonToDo as QuizLesson}
-            handleEvaluateAnswer={(answer: { alternatives: number[] }) => {
-              handleEvaluateAnswer(answer)
-            }}
+            handleEvaluateAnswer={handleEvaluateQuizAnswer}
+            markQuestionAsSolved={markQuestionAsSolved}
+            markQuestionAsUnsolved={markQuestionAsUnsolved}
           />
         )}
       </div>
