@@ -52,7 +52,7 @@ class UserAnswerStatisticRepositoryJSON
     )
     return userAnswerStatistics.map(
       (userAnswerStatistic) =>
-        new UserAnswerStatistic({ ...userAnswerStatistic }),
+        new UserAnswerStatistic({ ...userAnswerStatistic, updatedAt: new Date(userAnswerStatistic.updatedAt) }),
     )
   }
 

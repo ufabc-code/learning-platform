@@ -6,30 +6,23 @@ import Module from "server/entities/module";
 import User from "server/entities/user";
 import UserAnswerStatistic from "server/entities/userAnswerStatistic";
 import IUserAnswerStatisticRepository from "server/repositories/iUserAnswerStatisticRepository";
+import { userStatistics } from "server/router/getUserStatistics/routes";
 
 interface CourseVisualizerProps {
     course: Course,
-    user?: User,
-    userAnswerStatistic?: UserAnswerStatistic[],
+    userAnswerStatistic: UserAnswerStatistic[],
 }
 
 export default function CourseVisualizer({
-    course, user, userAnswerStatistic }: CourseVisualizerProps
+    course, userAnswerStatistic }: CourseVisualizerProps
 ) {
     const router = useRouter()
 
     function isModuleCompleted(module: Module) {
-        if(userAnswerStatistic == undefined)
-            return false
-        //verificar se o modulo está entre os que o usuario ja respondeu
-        const userAnswerStatisticFiltered = userAnswerStatistic.filter((el) => el.moduleId == module.id && el.attempts > 0)
-
-        return userAnswerStatisticFiltered.length > 0
+        return module.lessons.every((l) => userAnswerStatistic.map(u => u.lessonId).includes(l.id))
     }
 
     function isModuleCompletedIcon(module: Module): JSX.Element {
-        if (user == undefined || course == undefined)
-            return (<svg className="w-5 h-5 mr-2 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd"></path></svg>)
 
         if (isModuleCompleted(module))
             return (<svg className="w-6 h-6" fill="white" stroke="green" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>)
