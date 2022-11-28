@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Lesson from 'server/entities/lesson'
 import Module from 'server/entities/module'
 import { trpc } from 'utils/trpc'
@@ -17,6 +17,20 @@ const useLessonStatistics = ({
   const [numberOfLessons, setNumberOfLessons] = useState(0)
   const [savingAnswers, setSavingAnswers] = useState(false)
   const trpcClient = trpc.useContext().client
+
+  const getModuleId = useCallback(
+    (lessonId: string) => {
+      for (const m of data?.modules || []) {
+        for (const lesson of m.lessons) {
+          if (lesson.id === lessonId) {
+            return m.id
+          }
+        }
+      }
+      throw new Error('Could not find module id')
+    },
+    [data?.modules],
+  )
 
   const statistics = useRef<
     Record<
@@ -86,7 +100,12 @@ const useLessonStatistics = ({
         ([lessonId, { attempts, answer }]) => {
           return {
             attempts,
-            answer: { courseId, moduleId, lessonId, answer },
+            answer: {
+              courseId,
+              moduleId: getModuleId(lessonId),
+              lessonId,
+              answer,
+            },
           }
         },
       )
@@ -97,7 +116,14 @@ const useLessonStatistics = ({
         },
       })
     }
-  }, [courseId, evaluateModule, examRunning, lessons.length, moduleId])
+  }, [
+    courseId,
+    evaluateModule,
+    examRunning,
+    getModuleId,
+    lessons.length,
+    moduleId,
+  ])
 
   const handleEvaluateAnswer = (
     answer: { code: string; language: string } | { alternatives: number[] },
@@ -107,7 +133,12 @@ const useLessonStatistics = ({
     if (lessons && firstElement?.id) {
       return new Promise((resolve, reject) => {
         evaluateLesson(
-          { courseId, moduleId, lessonId: firstElement.id, answer },
+          {
+            courseId,
+            moduleId: getModuleId(firstElement.id),
+            lessonId: firstElement.id,
+            answer,
+          },
           {
             onSuccess(data) {
               statistics.current[firstElement.id] = {

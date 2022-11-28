@@ -16,6 +16,7 @@ class GetLessonsToRememberService {
         userId: user.id,
         courseId,
       })
+      
     userAnswerStatistics.sort((a, b) => {
       if (a.attempts !== b.attempts) {
         return b.attempts - a.attempts
@@ -31,6 +32,7 @@ class GetLessonsToRememberService {
       }
       return 0
     })
+    
 
     const lessonsToRemember = userAnswerStatistics
       .slice(0, 10)
