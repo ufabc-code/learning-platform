@@ -25,6 +25,13 @@ class UserAnswerStatisticRepositoryJSON
     return await this.getUserAnswerStatisticsFromFile()
   }
 
+  async findAllByUserId(userId: string): Promise<UserAnswerStatistic[]> {
+    const userAnswerStatistics = await this.getUserAnswerStatisticsFromFile()
+    return userAnswerStatistics.filter(
+      (userAnswerStatistic) => userAnswerStatistic.userId === userId,
+    )
+  }
+
   async clear(): Promise<void> {
     await this.saveUserAnswerStatisticsToFile([])
   }

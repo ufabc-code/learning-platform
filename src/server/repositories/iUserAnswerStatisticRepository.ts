@@ -11,6 +11,7 @@ interface IUserAnswerStatisticRepository {
     userId: string
     courseId: string
   }): Promise<UserAnswerStatistic[]>
+  findAllByUserId(userId: string): Promise<UserAnswerStatistic[]>
 }
 
 export default IUserAnswerStatisticRepository
