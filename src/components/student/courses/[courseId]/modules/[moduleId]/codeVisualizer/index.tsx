@@ -217,7 +217,7 @@ export function CodeVisualizer({
     setActiveTab(2)
     if (result) {
       addToast({
-        message: 'Respota correta!',
+        message: 'Resposta correta!',
         icon: icons.success,
       })
     } else {
