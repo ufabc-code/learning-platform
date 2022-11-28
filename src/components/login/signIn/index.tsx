@@ -1,3 +1,4 @@
+import { useUser } from 'providers/user'
 import { useRouter } from 'next/router'
 import { trpc } from 'utils/trpc'
 
@@ -14,13 +15,15 @@ function SignIn({ email, setEmail, setPage }: SignInProps) {
     url: '/api/trpc',
   })
 
+  const { login } = useUser()
+
   async function handleLogin() {
     const token = await client.query('users.signIn', {
       email,
       provider: 'fake-auth-provider',
       token: 'validToken',
     })
-    localStorage.setItem('token', token)
+    login(token)
     router.push('/')
   }
 
