@@ -1,26 +1,35 @@
-import * as trpc from '@trpc/server'
-import { inferAsyncReturnType } from '@trpc/server'
-import User from 'server/entities/user'
 import { Request, Response } from 'express'
 import { NextApiRequest, NextApiResponse } from 'next'
+import * as trpc from '@trpc/server'
+import * as trpcNext from '@trpc/server/adapters/next'
+import User from 'server/entities/user'
 import { authMiddleware } from './middlewares/authMiddleware'
 
-export type AppContextOptions = {
+export type CreateContextOptions = {
   req: NextApiRequest | Request
   res: NextApiResponse | Response
   user: User | null
 }
 
-export async function createContext(opts: AppContextOptions) {
+export const createContextInner = async (opts: CreateContextOptions) => {
   return {
-    ...opts
+    ...opts,
   }
 }
 
-type Context = inferAsyncReturnType<typeof createContext>
+export const createContext = async (
+  opts: trpcNext.CreateNextContextOptions,
+) => {
+  const { req, res } = opts
+  const ctx: CreateContextOptions = {
+    req,
+    res,
+    user: null,
+  }
+  authMiddleware(ctx)
+  return await createContextInner(ctx)
+}
 
-export const createRouter = () =>
-  trpc.router<Context>().middleware(async ({ ctx, next }) => {
-    authMiddleware(ctx, next)
-    return next()
-  })
+type Context = trpc.inferAsyncReturnType<typeof createContext>
+
+export const createRouter = () => trpc.router<Context>()
