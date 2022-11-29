@@ -10,14 +10,7 @@ import { trpc } from 'utils/trpc'
 import ExerciseSection from './exerciseSection'
 import SolutionSection from './solutionSection'
 import TestsSection from './testsSection'
-
-interface Result {
-  loading: boolean
-  result: {
-    output: string
-    status: 'Accepted' | 'Wrong Answer' | 'Error' | ''
-  }
-}
+import { getEmptyResult, getVerdict, Result } from './utils'
 
 interface CodeVisualizerProps {
   codeLesson: CodeLesson
@@ -25,8 +18,9 @@ interface CodeVisualizerProps {
     code: string
     language: string
   }) => Promise<boolean>
-  markQuestionAsSolved: () => void
-  markQuestionAsUnsolved: () => void
+  markQuestionAsSolved?: () => void
+  markQuestionAsUnsolved?: () => void
+  debug?: boolean
 }
 
 export function CodeVisualizer({
@@ -34,6 +28,7 @@ export function CodeVisualizer({
   handleEvaluateAnswer,
   markQuestionAsSolved,
   markQuestionAsUnsolved,
+  debug = false,
 }: CodeVisualizerProps) {
   const [code, setCode] = useState(codeLesson.template.code)
   const [language, setLanguage] = useState(codeLesson.template.language)
@@ -55,15 +50,7 @@ export function CodeVisualizer({
   const languages = ['c++', 'javascript', 'python']
 
   useEffect(() => {
-    setResults(
-      codeLesson.tests.map(() => ({
-        loading: false,
-        result: {
-          output: '',
-          status: '',
-        },
-      })),
-    )
+    setResults(codeLesson.tests.map(() => getEmptyResult()))
   }, [codeLesson.tests])
 
   async function runCode({
@@ -90,42 +77,6 @@ export function CodeVisualizer({
     setCodeRunning(true)
     setResult(await runCode({ code, language, input: stdin }))
     setCodeRunning(false)
-  }
-
-  function getVerdict({
-    stdout,
-    errorMessage,
-    expectedOutput,
-  }: {
-    stdout: string
-    errorMessage: string
-    expectedOutput: string
-  }): 'Accepted' | 'Wrong Answer' | 'Error' | '' {
-    if (errorMessage) {
-      return 'Error'
-    }
-
-    const linesStdout: string[] = stdout
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0)
-
-    const linesExpectedOutput: string[] = expectedOutput
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0)
-
-    if (linesStdout.length !== linesExpectedOutput.length) {
-      return 'Wrong Answer'
-    }
-
-    for (let i = 0; i < linesStdout.length; i++) {
-      if (linesStdout[i] !== linesExpectedOutput[i]) {
-        return 'Wrong Answer'
-      }
-    }
-
-    return 'Accepted'
   }
 
   async function runTest(
@@ -172,17 +123,6 @@ export function CodeVisualizer({
     }
   }
 
-  function getEmptyResult(loading = false): Result {
-    const result: Result = {
-      loading,
-      result: {
-        output: '',
-        status: '',
-      },
-    }
-    return result
-  }
-
   function handleRunTests() {
     setProgress(0)
     const newResults = []
@@ -214,10 +154,12 @@ export function CodeVisualizer({
     })
     const result = await handleEvaluateAnswer({ code, language })
     setCorrectAnswer(result)
-    setActiveTab(2)
+    if (!debug) {
+      setActiveTab(2)
+    }
     if (result) {
       addToast({
-        message: 'Respota correta!',
+        message: 'Resposta correta!',
         icon: icons.success,
       })
     } else {
@@ -230,10 +172,25 @@ export function CodeVisualizer({
 
   function handleNextQuestion() {
     if (correctAnswer) {
-      markQuestionAsSolved()
+      markQuestionAsSolved && markQuestionAsSolved()
     } else {
-      markQuestionAsUnsolved()
+      markQuestionAsUnsolved && markQuestionAsUnsolved()
     }
+  }
+
+  function reset() {
+    setCode(codeLesson.template.code)
+    setLanguage(codeLesson.template.language)
+    setStdin('')
+    setResult({
+      status: CodeRunnerStatus.OK,
+      output: '',
+    })
+    setCodeRunning(false)
+    setProgress(0)
+    setResults(codeLesson.tests.map(() => getEmptyResult()))
+    setActiveTab(0)
+    setCorrectAnswer(undefined)
   }
 
   return (
@@ -279,12 +236,12 @@ export function CodeVisualizer({
           ]}
         />
       </div>
-      <div className="mt-8">
+      <div className="mt-8 flex gap-x-4">
         {correctAnswer === undefined ? (
           <button
             type="button"
             onClick={() => handleEvaluateCodeAnswer()}
-            className="mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            className="block rounded-lg bg-green-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300"
           >
             Verificar
           </button>
@@ -296,6 +253,25 @@ export function CodeVisualizer({
           >
             Avançar
           </button>
+        )}
+        {debug && (
+          <button
+            type="button"
+            onClick={() => reset()}
+            className="block rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          >
+            Reset
+          </button>
+        )}
+
+        {debug && correctAnswer !== undefined && (
+          <span
+            className={`block rounded-lg px-5 py-2.5 text-center text-sm font-medium ${
+              correctAnswer ? 'text-green-700' : 'text-red-700'
+            }`}
+          >
+            {correctAnswer ? 'Resposta correta' : 'Resposta incorreta'}
+          </span>
         )}
       </div>
     </div>

@@ -215,6 +215,7 @@ function EditModule() {
         </div>
         {module.lessons.map((lesson, index) => (
           <LessonEditor
+            courseId={course.id}
             setModule={setModule}
             updateLesson={updateLesson}
             key={index}

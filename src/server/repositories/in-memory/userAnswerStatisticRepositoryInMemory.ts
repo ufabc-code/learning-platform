@@ -38,6 +38,12 @@ class UserAnswerStatisticRepositoryInMemory
         userAnswerStatistic.courseId === courseId,
     )
   }
+
+  async findAllByUserId(userId: string): Promise<UserAnswerStatistic[]> {
+    return this.userAnswerStatistics.filter(
+      (userAnswerStatistic) => userAnswerStatistic.userId === userId,
+    )
+  }
 }
 
 export default UserAnswerStatisticRepositoryInMemory

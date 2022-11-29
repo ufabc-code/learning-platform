@@ -5,6 +5,7 @@ import { evaluateModule } from './evaluateModule/router'
 import { users } from './users/router'
 import { runCode } from './runCode/router'
 import { getLessonsToRemember } from './getLessonsToRemember/router'
+import { userStatistics } from './getUserStatistics/routes'
 
 export const appRouter = createRouter()
   .merge('courses.', courses)
@@ -13,5 +14,6 @@ export const appRouter = createRouter()
   .merge('users.', users)
   .merge('runCode.', runCode)
   .merge('lessonsToRemember.', getLessonsToRemember)
+  .merge('userStatistics.', userStatistics)
 
 export type AppRouter = typeof appRouter

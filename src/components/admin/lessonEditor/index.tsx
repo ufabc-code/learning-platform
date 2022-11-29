@@ -1,48 +1,18 @@
 import { ArrowDownIcon, ArrowUpIcon, PlusIcon } from '@heroicons/react/24/solid'
-
 import { TrashIcon } from '@heroicons/react/24/outline'
 import CodeLesson from 'server/entities/codeLesson'
 import Module from 'server/entities/module'
 import QuizLesson from 'server/entities/quizLesson'
 import { CodeLessonEditor } from '../codeLessonEditor'
 import { QuizLessonEditor } from '../quizLessonEditor'
-
-function emptyCodeLesson(): CodeLesson {
-  return {
-    id: Math.random().toString(),
-    type: 'code',
-    solution: {
-      code: '',
-      language: '',
-      text: '',
-    },
-    template: {
-      code: '',
-      language: '',
-    },
-    tests: [],
-    text: 'string',
-  }
-}
-
-function emptyQuizLesson(): QuizLesson {
-  return {
-    id: Math.random().toString(),
-    type: 'quiz',
-    text: '',
-    alternatives: [],
-    solution: {
-      text: '',
-      correct: [],
-    },
-  }
-}
+import { emptyCodeLesson, emptyQuizLesson } from './utils'
 
 interface LessonEditorProps {
   lesson: CodeLesson | QuizLesson
   updateLesson: (lesson: CodeLesson | QuizLesson) => void
   module: Module
   setModule: (module: Module) => void
+  courseId: string
 }
 
 export function LessonEditor({
@@ -50,6 +20,7 @@ export function LessonEditor({
   updateLesson,
   module,
   setModule,
+  courseId,
 }: LessonEditorProps) {
   function handleMoveLessonForward() {
     const index = module.lessons.findIndex(({ id }) => id === lesson.id)
@@ -122,12 +93,16 @@ export function LessonEditor({
 
       {lesson.type === 'code' && (
         <CodeLessonEditor
+          courseId={courseId}
+          moduleId={module.id}
           setCodeLesson={updateLesson}
           codeLesson={lesson as CodeLesson}
         />
       )}
       {lesson.type === 'quiz' && (
         <QuizLessonEditor
+          courseId={courseId}
+          moduleId={module.id}
           setQuizLesson={updateLesson}
           quizLesson={lesson as QuizLesson}
         />
