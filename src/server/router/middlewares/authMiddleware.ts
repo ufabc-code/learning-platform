@@ -1,13 +1,13 @@
 import User from 'server/entities/user'
-import { AppContextOptions } from '../context'
 import { verify } from 'jsonwebtoken'
+import { CreateContextOptions } from '../context'
 
 interface IPayload {
   email: string
   id: string
 }
 
-export function authMiddleware(ctx: AppContextOptions, next: () => void) {
+export function authMiddleware(ctx: CreateContextOptions) {
   const SECRET_KEY = 'SECRET_KEY'
 
   const { req } = ctx
@@ -16,13 +16,13 @@ export function authMiddleware(ctx: AppContextOptions, next: () => void) {
 
   if (!token) {
     ctx.user = null
-    return next()
+    return
   }
 
   try {
     const decoded = verify(token || '', SECRET_KEY) as IPayload
     ctx.user = new User({ id: decoded.id, email: decoded.email })
-    return next()
+    return
   } catch (error) {
     ctx.user = null
     throw new Error('Invalid token')
