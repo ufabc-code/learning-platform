@@ -21,7 +21,7 @@ const Home: NextPage = () => {
           <div className="mx-auto w-2/3 py-8 text-center">
             <h2 className="text-4xl font-bold">
               Aprenda <span className="text-flowbite-blue">programação</span>{' '}
-              utilizando metodos de repetição{' '}
+              utilizando métodos de repetição{' '}
               <span className="text-flowbite-blue">
                 cientificamente comprovados
               </span>
