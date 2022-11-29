@@ -18,8 +18,9 @@ interface CodeVisualizerProps {
     code: string
     language: string
   }) => Promise<boolean>
-  markQuestionAsSolved: () => void
-  markQuestionAsUnsolved: () => void
+  markQuestionAsSolved?: () => void
+  markQuestionAsUnsolved?: () => void
+  debug?: boolean
 }
 
 export function CodeVisualizer({
@@ -27,6 +28,7 @@ export function CodeVisualizer({
   handleEvaluateAnswer,
   markQuestionAsSolved,
   markQuestionAsUnsolved,
+  debug = false,
 }: CodeVisualizerProps) {
   const [code, setCode] = useState(codeLesson.template.code)
   const [language, setLanguage] = useState(codeLesson.template.language)
@@ -152,7 +154,9 @@ export function CodeVisualizer({
     })
     const result = await handleEvaluateAnswer({ code, language })
     setCorrectAnswer(result)
-    setActiveTab(2)
+    if (!debug) {
+      setActiveTab(2)
+    }
     if (result) {
       addToast({
         message: 'Resposta correta!',
@@ -168,10 +172,25 @@ export function CodeVisualizer({
 
   function handleNextQuestion() {
     if (correctAnswer) {
-      markQuestionAsSolved()
+      markQuestionAsSolved && markQuestionAsSolved()
     } else {
-      markQuestionAsUnsolved()
+      markQuestionAsUnsolved && markQuestionAsUnsolved()
     }
+  }
+
+  function reset() {
+    setCode(codeLesson.template.code)
+    setLanguage(codeLesson.template.language)
+    setStdin('')
+    setResult({
+      status: CodeRunnerStatus.OK,
+      output: '',
+    })
+    setCodeRunning(false)
+    setProgress(0)
+    setResults(codeLesson.tests.map(() => getEmptyResult()))
+    setActiveTab(0)
+    setCorrectAnswer(undefined)
   }
 
   return (
@@ -217,12 +236,12 @@ export function CodeVisualizer({
           ]}
         />
       </div>
-      <div className="mt-8">
+      <div className="mt-8 flex gap-x-4">
         {correctAnswer === undefined ? (
           <button
             type="button"
             onClick={() => handleEvaluateCodeAnswer()}
-            className="mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            className="block rounded-lg bg-green-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300"
           >
             Verificar
           </button>
@@ -234,6 +253,25 @@ export function CodeVisualizer({
           >
             Avançar
           </button>
+        )}
+        {debug && (
+          <button
+            type="button"
+            onClick={() => reset()}
+            className="block rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          >
+            Reset
+          </button>
+        )}
+
+        {debug && correctAnswer !== undefined && (
+          <span
+            className={`block rounded-lg px-5 py-2.5 text-center text-sm font-medium ${
+              correctAnswer ? 'text-green-700' : 'text-red-700'
+            }`}
+          >
+            {correctAnswer ? 'Resposta correta' : 'Resposta incorreta'}
+          </span>
         )}
       </div>
     </div>

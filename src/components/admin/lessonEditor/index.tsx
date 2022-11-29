@@ -43,6 +43,7 @@ interface LessonEditorProps {
   updateLesson: (lesson: CodeLesson | QuizLesson) => void
   module: Module
   setModule: (module: Module) => void
+  courseId: string
 }
 
 export function LessonEditor({
@@ -50,6 +51,7 @@ export function LessonEditor({
   updateLesson,
   module,
   setModule,
+  courseId,
 }: LessonEditorProps) {
   function handleMoveLessonForward() {
     const index = module.lessons.findIndex(({ id }) => id === lesson.id)
@@ -122,6 +124,8 @@ export function LessonEditor({
 
       {lesson.type === 'code' && (
         <CodeLessonEditor
+          courseId={courseId}
+          moduleId={module.id}
           setCodeLesson={updateLesson}
           codeLesson={lesson as CodeLesson}
         />
