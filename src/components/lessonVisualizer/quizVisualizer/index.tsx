@@ -1,7 +1,7 @@
 import MarkdownRender from 'components/markdownRender'
-import StudentQuizAnswer from 'components/student/quizAnswerModal'
 import { useState } from 'react'
 import QuizLesson from 'server/entities/quizLesson'
+import StudentQuizAnswer from './quizAnswerModal'
 
 interface QuizVisualizerProps {
   quizLesson: QuizLesson
