@@ -179,7 +179,7 @@ function Courses() {
         <div className="mt-4 grid grid-cols-1 gap-4">
           {course.modules.map(({ title, id }) => (
             <Link href={`${courseId}/modules/${id}`} key={id}>
-              <div className="cursor-pointer rounded-xl border p-4 shadow-md">
+              <div className="cursor-pointer rounded-xl border p-4 shadow-md hover:bg-gray-100">
                 <h4 className="text-lg font-medium">
                   {title} - {id}
                 </h4>
