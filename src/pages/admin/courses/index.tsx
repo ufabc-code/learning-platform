@@ -1,3 +1,4 @@
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import AdminPageBase from 'components/admin/pageBase'
 import type { NextPage } from 'next'
 import Link from 'next/link'
@@ -26,23 +27,21 @@ const Courses: NextPage = () => {
   return (
     <AdminPageBase title="Gerenciar Cursos">
       <div className="flex flex-col">
-        <button
-          onClick={handleCreateCourse}
-          className="mb-6 flex h-10 w-10 justify-center self-end rounded-full border-2 border-solid border-black align-middle text-3xl font-bold leading-none"
-        >
-          +
-        </button>
+        <div className="mb-4 flex justify-end">
+          <button
+            className="rounded-full p-1 text-blue-600 hover:bg-blue-100"
+            onClick={handleCreateCourse}
+          >
+            <PlusCircleIcon className="h-12 w-12" />
+          </button>
+        </div>
         <ul className="flex flex-col gap-y-2">
           {!!courses &&
             courses.map(({ id, title }) => (
               <Link href={`courses/${id}`} key={id}>
-                <a>
-                  <li className="flex border border-solid border-black">
-                    <h6 className="w-1/3 text-2xl">{title}</h6>
-                    <span className="w-1/3">Lorem ipsum</span>
-                    <span className="w-1/3">Lorem, ipsum</span>
-                  </li>
-                </a>
+                <div className="cursor-pointer rounded-xl border p-4 shadow-md hover:bg-gray-100">
+                  <h4 className="text-lg font-medium">{title}</h4>
+                </div>
               </Link>
             ))}
         </ul>
