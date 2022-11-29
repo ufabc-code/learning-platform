@@ -1,1 +1,158 @@
-[{"id":"f8a7014b-1d59-41ac-b8bd-600afb89c982","title":"Curso de Python","description":"este curso ensina python","modules":[{"id":"0.6705410453243992","title":"variaveis","description":"ensina variaveis","lessons":[{"id":"0.15750786643702486","type":"code","solution":{"text":"esta é uma explicação","code":"name = input()\nprint(name)","language":"python"},"template":{"code":"name = input()","language":"python"},"tests":[{"input":"ola","expected":"ola\n"},{"input":"mundo","expected":"mundo\n"}],"text":"# Titulo Aleatorio\n\nEnunciado do exercicio. Abaixo uma tabela\n\nExemplo   | Valor do exemplo\n--------- | ------\nExemplo 1 | R$ 10\nExemplo 2 | R$ 8\nExemplo 3 | R$ 7\n\n"},{"id":"0.172244008144258","type":"quiz","text":"# Este é um quiz\n\naqui é um texto\nisso também é um texto\n\nSelecione as duas alternativas corretas","alternatives":[{"text":"Alternativa 1"},{"text":"Alternativa 2"},{"text":"Errada 1\n\nAlternativa aceita markdown também"},{"text":"Errada 2 "}],"solution":{"text":"correta é a 1 e 2\n\n## isto é markdown também","correct":[0,1]}}]},{"id":"0.062346556474378145","title":"Operadores","description":"Curso sobre operadores em python.","lessons":[{"id":"0.4749059027503455","type":"quiz","text":"Qual operador realiza a soma?","alternatives":[{"text":"\\-"},{"text":"\\*"},{"text":"\\+"}],"solution":{"text":"+","correct":[2]}}]}],"slug":"curso-python"}]
+[
+    {
+      "id": "f8a7014b-1d59-41ac-b8bd-600afb89c982",
+      "title": "Curso de Python",
+      "description": "Este curso ensina Python",
+      "modules": [
+        {
+          "id": "0.6705410453243992",
+          "title": "Funções",
+          "description": "Este módulo vai te ensinar um pouco sobre funções dentro do Python",
+          "lessons": [
+            {
+              "id": "0.15750786643702486",
+              "type": "code",
+              "solution": {
+                "text": "Neste exercício, é necessário o uso de condicionais para validar a entrada passada pelo usuário e retornar conforme solicitado pelo enunciado. Por isso, foi utilizado as condicionantes (if, elif e else).",
+                "code": "number = int(input())\n\ndef positivoOuNegativo(number):\n     if number<0:\n         return \"NEGATIVO\"\n     elif number>0:\n         return \"POSITIVO\"\n     else:\n        return \"ZERO\"\n\n\nprint(positivoOuNegativo(number))",
+                "language": "python"
+              },
+              "template": {
+                "code": "number = int(input())\n\ndef positivoOuNegativo(number):",
+                "language": "python"
+              },
+              "tests": [
+                { "input": "10", "expected": "POSITIVO" },
+                { "input": "-1", "expected": "NEGATIVO\n" },
+                { "input": "0", "expected": "ZERO" },
+                { "input": "-5", "expected": "NEGATIVO" }
+              ],
+              "text": "# Exercício sobre Funções\n\nFaça um programa, com uma função que necessite de um argumento. A função retorna o 'POSITIVO', se seu argumento for positivo, 'NEGATIVO' se seu argumento negativo ou 'ZERO'.\n\nA respostas devem obedecer exemplos conforme a tabela abaixo:\n\nEntrada Exemplo | Saída Exemplo\n------------------  | ----------------\n0  | ZERO\n1  | POSITIVO\n-1 | NEGATIVO\n\n"
+            },
+            {
+              "id": "0.172244008144258",
+              "type": "quiz",
+              "text": "# Este é um quiz sobre funções\n\nSelecione a(s) alternativa(s) correta(s) sobre o contexto de funções:",
+              "alternatives": [
+                {
+                  "text": "Uma função qualquer pode devolver simultaneamente mais do que um valor;"
+                },
+                {
+                  "text": "A instrução return termina a execução de uma função;"
+                },
+                { "text": "Uma função pode não ter parâmetros;" },
+                {
+                  "text": "O nome de função não pode ser uma palavra reservada;"
+                },
+                { "text": "Uma função Tem que devolver sempre um inteiro;" }
+              ],
+              "solution": {
+                "text": "As alternativas corretam são 2, 3 e 4",
+                "correct": [1, 2, 3]
+              }
+            }
+          ]
+        },
+        {
+          "id": "0.062346556474378145",
+          "title": "Operadores",
+          "description": "Curso sobre operadores em python.",
+          "lessons": [
+            {
+              "id": "0.4749059027503455",
+              "type": "quiz",
+              "text": "Qual operador realiza a soma?",
+              "alternatives": [
+                { "text": "-" },
+                { "text": "*" },
+                { "text": "/" },
+                { "text": "+" }
+              ],
+              "solution": { "text": "+", "correct": [3] }
+            },
+            {
+              "id": "0.6195936077690336",
+              "type": "quiz",
+              "text": "Qual operador realiza multiplicação?",
+              "alternatives": [
+                { "text": "/" },
+                { "text": "-" },
+                { "text": "+" },
+                { "text": "*" }
+              ],
+              "solution": { "text": "*", "correct": [3] }
+            }
+          ]
+        }
+      ],
+      "slug": "curso-python"
+    },
+    {
+      "id": "2ab1beba-2f4a-434f-bada-44ce618c862e",
+      "title": "Curso de C++",
+      "description": "Este curso ensina C++",
+      "modules": [
+        {
+          "id": "0.33927118727293726",
+          "title": "Switch",
+          "description": "Este módulo vai te ensinar um pouco sobre o switch-case dentro do C++",
+          "lessons": [
+            {
+              "id": "0.7481065123102495",
+              "type": "code",
+              "solution": {
+                "text": "Para o funcionamento desta solução, foi utilizado o uso do switch a partir da entrada do mês que o usuário forneceu via input, e logo depois realizado a conferência dos casos em que os dias do mês podem ser de 31, 30 ou 28 dias para um ano não bissexto.  ",
+                "code": "#include <iostream>\nusing namespace std;\n\nint main()\n{\n    int days=0, month;\n\n    cin >> month;\n\n    switch(month)\n    {\n        case 1: case 3: case 5: case 7:\n        case 8: case 10: case 12:\n            days = days + 1;\n\n        case 4: case 6:\n        case 9: case 11:\n            days = days + 2;\n\n        case 2:\n            days=days+28;\n            break;\n        default:\n            cout <<\"Mês inválido\"<<endl;\n            return 0;\n    }\n\n    cout << days;\n}",
+                "language": "c++"
+              },
+              "template": {
+                "code": "#include <iostream>\nusing namespace std;\n\nint main()\n{\n    int days=0, month;\n\n    cout << \"Numero do mes: \";\n    cin >> month;\n\n    switch(month)\n    {\n      /* CODE HERE */\n    }\n  \n    return 0;\n}\n",
+                "language": "c++"
+              },
+              "tests": [
+                { "input": "1", "expected": "31" },
+                { "input": "2", "expected": "28" },
+                { "input": "3", "expected": "31" },
+                { "input": "4", "expected": "30" },
+                { "input": "5", "expected": "31" },
+                { "input": "6", "expected": "30" },
+                { "input": "7", "expected": "31" },
+                { "input": "8", "expected": "31" },
+                { "input": "9", "expected": "30" },
+                { "input": "10", "expected": "31" },
+                { "input": "11", "expected": "30" },
+                { "input": "12", "expected": "31" },
+                { "input": "0", "expected": "Mês inválido" },
+                { "input": "13", "expected": "Mês inválido" },
+                { "input": "14", "expected": "Mês inválido" }
+              ],
+              "text": "# Exercício sobre Funções\n\nUsando os conceitos de switch case, faça um programa que pergunte o mês ao usuário (número de 1 até 12), e diga quantos dias aquele mês possui. Fevereiro tem 28 dias (não é bissexto).\n\nAs respostas devem obedecer exemplos conforme a tabela abaixo:\n\nEntrada Exemplo | Saída Exemplo\n------------------  | ----------------\n1  | 31\n2  | 28\n6  | 30\n"
+            },
+            {
+              "id": "0.9583641552480748",
+              "type": "quiz",
+              "text": "# Este é um quiz sobre switch\n\nSelecione a(s) alternativa(s) correta(s):",
+              "alternatives": [
+                {
+                  "text": "É possível adicionar um valor \"default\" para situações que os casos específicos não foram atendidos no Switch; "
+                },
+                {
+                  "text": "É possível adicionar apenas 5 cases dentro de um Switch;"
+                },
+                { "text": "A variável de entrada do Switché sempre uma string;" },
+                {
+                  "text": "É comum o uso de \"break\" para interrupção de código Switch-case;"
+                }
+              ],
+              "solution": {
+                "text": "As alternativas corretas são 1 e 4",
+                "correct": [0, 3]
+              }
+            }
+          ]
+        }
+      ],
+      "slug": "curso-c-mais-mais"
+    }
+  ]
+  
