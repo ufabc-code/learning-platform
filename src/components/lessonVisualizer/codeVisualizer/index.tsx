@@ -10,14 +10,7 @@ import { trpc } from 'utils/trpc'
 import ExerciseSection from './exerciseSection'
 import SolutionSection from './solutionSection'
 import TestsSection from './testsSection'
-
-interface Result {
-  loading: boolean
-  result: {
-    output: string
-    status: 'Accepted' | 'Wrong Answer' | 'Error' | ''
-  }
-}
+import { getEmptyResult, getVerdict, Result } from './utils'
 
 interface CodeVisualizerProps {
   codeLesson: CodeLesson
@@ -55,15 +48,7 @@ export function CodeVisualizer({
   const languages = ['c++', 'javascript', 'python']
 
   useEffect(() => {
-    setResults(
-      codeLesson.tests.map(() => ({
-        loading: false,
-        result: {
-          output: '',
-          status: '',
-        },
-      })),
-    )
+    setResults(codeLesson.tests.map(() => getEmptyResult()))
   }, [codeLesson.tests])
 
   async function runCode({
@@ -90,42 +75,6 @@ export function CodeVisualizer({
     setCodeRunning(true)
     setResult(await runCode({ code, language, input: stdin }))
     setCodeRunning(false)
-  }
-
-  function getVerdict({
-    stdout,
-    errorMessage,
-    expectedOutput,
-  }: {
-    stdout: string
-    errorMessage: string
-    expectedOutput: string
-  }): 'Accepted' | 'Wrong Answer' | 'Error' | '' {
-    if (errorMessage) {
-      return 'Error'
-    }
-
-    const linesStdout: string[] = stdout
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0)
-
-    const linesExpectedOutput: string[] = expectedOutput
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0)
-
-    if (linesStdout.length !== linesExpectedOutput.length) {
-      return 'Wrong Answer'
-    }
-
-    for (let i = 0; i < linesStdout.length; i++) {
-      if (linesStdout[i] !== linesExpectedOutput[i]) {
-        return 'Wrong Answer'
-      }
-    }
-
-    return 'Accepted'
   }
 
   async function runTest(
@@ -170,17 +119,6 @@ export function CodeVisualizer({
         return [...prevResults]
       })
     }
-  }
-
-  function getEmptyResult(loading = false): Result {
-    const result: Result = {
-      loading,
-      result: {
-        output: '',
-        status: '',
-      },
-    }
-    return result
   }
 
   function handleRunTests() {
