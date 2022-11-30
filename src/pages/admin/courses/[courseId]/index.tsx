@@ -3,6 +3,7 @@ import {
   PlusCircleIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline'
+import ConfirmationModal from 'components/admin/courses/[courseId]/confirmationModal'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -19,6 +20,7 @@ function Courses() {
   const courseUpdate = trpc.useMutation('courses.update')
   const deleteCourse = trpc.useMutation('courses.delete')
   const [course, setCourse] = useState<Course | null>(null)
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
 
   useEffect(() => {
     if (courseQuery.data) {
@@ -82,7 +84,7 @@ function Courses() {
         onSuccess: () => {
           client.invalidateQueries(['courses.get', { id: course.id }])
           client.invalidateQueries('courses.list')
-          router.push(`/`)
+          router.push(`/admin/courses`)
         },
       },
     )
@@ -90,12 +92,19 @@ function Courses() {
 
   return (
     <div className="p-8">
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        setIsOpen={setIsConfirmationModalOpen}
+        handleDeleteCourse={handleDeleteCourse}
+        slug={course.slug}
+      />
+
       <div className="mb-8 flex justify-between">
         <h1 className="my-auto flex text-5xl font-semibold">Editar Curso</h1>
         <div>
           <button
             className="mr-4 rounded-lg p-2 text-red-600 hover:bg-red-100"
-            onClick={handleDeleteCourse}
+            onClick={() => setIsConfirmationModalOpen(true)}
           >
             <TrashIcon className="h-10 w-10" />
           </button>
