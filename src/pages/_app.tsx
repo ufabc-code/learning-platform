@@ -7,6 +7,7 @@ import Head from 'next/head'
 import Header from 'components/header'
 import Footer from 'components/footer'
 import UserProvider from 'providers/user'
+import { useRouter } from 'next/router'
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const trpcClient = trpc.createClient({
@@ -18,6 +19,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       }
     },
   })
+
+  const router = useRouter()
+
+  const routesWithoutNavigation = [/\/student\/courses\/\S+\/modules\/\S+/]
+  
+  const withoutNavigation = !!routesWithoutNavigation.find(
+    (regex) => regex.test(router.asPath),
+  )
+  console.log({ router })
 
   return (
     <>
@@ -31,11 +41,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <trpc.Provider client={trpcClient} queryClient={client}>
             <QueryClientProvider client={client}>
               <div className="flex min-h-screen flex-col">
-                <Header />
+                {!withoutNavigation && <Header />}
                 <main className="flex-grow">
                   <Component {...pageProps} />
                 </main>
-                <Footer />
+                {!withoutNavigation && <Footer />}
               </div>
             </QueryClientProvider>
           </trpc.Provider>
