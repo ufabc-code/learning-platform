@@ -22,7 +22,9 @@ const Header = () => {
         <Container>
           <div className="flex items-center justify-center">
             <h1 className="text-2xl font-bold text-gray-800 underline">
-              <Link href="/">Learning Platform</Link>
+              <Link href="/" passHref legacyBehavior>
+                <a>Learning Platform</a>
+              </Link>
             </h1>
             <ul className="flex flex-grow list-none justify-evenly">
               {routes.map((route) => (
@@ -37,7 +39,7 @@ const Header = () => {
             </ul>
             <div className="flex gap-3 md:order-2">
               {!user?.email && (
-                <Link href="/login" passHref>
+                <Link href="/login" passHref legacyBehavior>
                   <a>
                     <Button>Login</Button>
                   </a>

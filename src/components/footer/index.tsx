@@ -7,6 +7,7 @@ const Footer = () => {
           <a
             href="http://grub.academy/"
             target="_blank"
+            rel="noreferrer noopener"
             className="hover:underline"
           >
             GRUB Learning Platform
