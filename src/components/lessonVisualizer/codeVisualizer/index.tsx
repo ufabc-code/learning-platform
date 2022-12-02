@@ -44,6 +44,7 @@ export function CodeVisualizer({
   const [correctAnswer, setCorrectAnswer] = useState<undefined | boolean>(
     undefined,
   )
+  const [isLocked, setIsLocked] = useState(true)
 
   const { addToast } = useToast()
 
@@ -153,8 +154,9 @@ export function CodeVisualizer({
       icon: icons.loading,
     })
     const result = await handleEvaluateAnswer({ code, language })
-    setCorrectAnswer(result)
+    setCorrectAnswer(isLocked ? result : false)
     if (!debug) {
+      setIsLocked(false)
       setActiveTab(2)
     }
     if (result) {
@@ -191,6 +193,7 @@ export function CodeVisualizer({
     setResults(codeLesson.tests.map(() => getEmptyResult()))
     setActiveTab(0)
     setCorrectAnswer(undefined)
+    setIsLocked(true)
   }
 
   return (
@@ -231,7 +234,13 @@ export function CodeVisualizer({
             },
             {
               name: 'Solução',
-              children: <SolutionSection codeLesson={codeLesson} />,
+              children: (
+                <SolutionSection
+                  isLocked={isLocked}
+                  setIsLocked={setIsLocked}
+                  codeLesson={codeLesson}
+                />
+              ),
             },
           ]}
         />
