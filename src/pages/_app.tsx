@@ -23,11 +23,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   const router = useRouter()
 
   const routesWithoutNavigation = [/\/student\/courses\/\S+\/modules\/\S+/]
-  
-  const withoutNavigation = !!routesWithoutNavigation.find(
-    (regex) => regex.test(router.asPath),
+
+  const withoutNavigation = !!routesWithoutNavigation.find((regex) =>
+    regex.test(router.asPath),
   )
-  console.log({ router })
 
   return (
     <>
