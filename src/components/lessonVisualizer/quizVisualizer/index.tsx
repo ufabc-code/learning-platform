@@ -1,5 +1,5 @@
 import MarkdownRender from 'components/markdownRender'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import QuizLesson from 'server/entities/quizLesson'
 import StudentQuizAnswer from './quizAnswerModal'
 
