@@ -1,5 +1,5 @@
 import MarkdownRender from 'components/markdownRender'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import QuizLesson from 'server/entities/quizLesson'
 import StudentQuizAnswer from './quizAnswerModal'
 
@@ -47,10 +47,11 @@ export function QuizVisualizer({
 
   function handleNextQuestion() {
     if (correctAnswer) {
-      markQuestionAsSolved && markQuestionAsSolved()
+      markQuestionAsSolved?.()
     } else {
-      markQuestionAsUnsolved && markQuestionAsUnsolved()
+      markQuestionAsUnsolved?.()
     }
+    reset()
   }
 
   function reset() {

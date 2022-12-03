@@ -6,15 +6,15 @@ function Course() {
   const router = useRouter()
   const { courseId } = router.query
 
-  const courseQuery = trpc.useQuery(['courses.get', { id: courseId as string }])
-  const userStatisticQuery = trpc.useQuery(['userStatistics.get'])
-  const L = trpc.useQuery([
+  const { data: course } = trpc.useQuery([
+    'courses.get',
+    { id: courseId as string },
+  ])
+  const { data: userAnswerStatistic } = trpc.useQuery(['userStatistics.get'])
+  const { data: l } = trpc.useQuery([
     'lessonsToRemember.get',
     { courseId: courseId as string },
   ])
-  const l = L.data
-  const course = courseQuery.data
-  const userAnswerStatistic = userStatisticQuery.data
   if (!course || !userAnswerStatistic || !l) return null
 
   return (

@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+div.ͼ1.cm-editor.cm-focused {
+  outline: none;
+}
