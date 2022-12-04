@@ -9,9 +9,17 @@ const useLessonStatistics = ({
   courseId,
   moduleId,
 }: UseLessonStatisticsProps) => {
-  const { data } = trpc.useQuery(['courses.get', { id: courseId }])
-  const { mutate: evaluateModule } = trpc.useMutation('evaluateModule.evaluate')
-  const { mutate: evaluateLesson } = trpc.useMutation('evaluateLesson.evaluate')
+  const { data } = trpc.useQuery(['courses.get', { id: courseId }], {
+    useErrorBoundary: true,
+  })
+  const { mutate: evaluateModule } = trpc.useMutation(
+    'evaluateModule.evaluate',
+    { useErrorBoundary: true },
+  )
+  const { mutate: evaluateLesson } = trpc.useMutation(
+    'evaluateLesson.evaluate',
+    { useErrorBoundary: true },
+  )
   const [lessons, setLessons] = useState<Lesson[]>([])
   const [examRunning, setExamRunning] = useState(false)
   const [numberOfLessons, setNumberOfLessons] = useState(0)
