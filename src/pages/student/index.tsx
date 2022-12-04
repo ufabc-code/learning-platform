@@ -7,11 +7,12 @@ import Link from 'next/link'
 import ProgressBar from 'components/progressBar'
 
 function Student() {
-  const { data: courses, isLoading: isLoadingCourses } = trpc.useQuery([
-    'courses.getAll',
-  ])
+  const { data: courses, isLoading: isLoadingCourses } = trpc.useQuery(
+    ['courses.getAll'],
+    { useErrorBoundary: true },
+  )
   const { data: userAnswerStatistic, isLoading: isLoadingStatistics } =
-    trpc.useQuery(['userStatistics.get'])
+    trpc.useQuery(['userStatistics.get'], { useErrorBoundary: true })
 
   if (isLoadingCourses || isLoadingStatistics) {
     return (
@@ -43,6 +44,7 @@ function Student() {
       }).length / course.modules.length
     )
   }
+
   return (
     <Container>
       <section className="w-4/5">

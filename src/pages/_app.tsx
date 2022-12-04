@@ -8,6 +8,8 @@ import Header from 'components/header'
 import Footer from 'components/footer'
 import UserProvider from 'providers/user'
 import { useRouter } from 'next/router'
+import { ErrorBoundary } from 'react-error-boundary'
+import ErrorFallback from 'components/errorBoundary/errorFallback'
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const trpcClient = trpc.createClient({
@@ -29,7 +31,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   )
 
   return (
-    <>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Learning Platform</title>
@@ -50,7 +52,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           </trpc.Provider>
         </ToastProvider>
       </UserProvider>
-    </>
+    </ErrorBoundary>
   )
 }
 
