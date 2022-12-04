@@ -10,6 +10,8 @@ function ErrorFallback({
   switch (error.message) {
     case 'User not authenticated':
       return <UserNotAuthenticated resetErrorBoundary={resetErrorBoundary} />
+    case 'User not found':
+      return <UserNotAuthenticated resetErrorBoundary={resetErrorBoundary} />
     default:
       return (
         <div role="alert">

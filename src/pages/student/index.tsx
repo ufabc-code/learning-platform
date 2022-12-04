@@ -1,18 +1,49 @@
-import { trpc } from 'utils/trpc'
 import Course from 'server/entities/course'
 import UserAnswerStatistic from 'server/entities/userAnswerStatistic'
 import Spinner from 'components/spinner'
 import Container from 'components/container'
 import Link from 'next/link'
 import ProgressBar from 'components/progressBar'
+import { useEffect, useState } from 'react'
+import { trpc } from 'utils/trpc'
 
 function Student() {
-  const { data: courses, isLoading: isLoadingCourses } = trpc.useQuery(
-    ['courses.getAll'],
-    { useErrorBoundary: true },
-  )
-  const { data: userAnswerStatistic, isLoading: isLoadingStatistics } =
-    trpc.useQuery(['userStatistics.get'], { useErrorBoundary: true })
+  const [courses, setCourses] = useState<Course[] | undefined>([])
+  const [userAnswerStatistics, setUserAnswerStatistics] = useState<
+    UserAnswerStatistic[] | undefined
+  >([])
+
+  const [isLoadingCourses, setIsLoadingCourses] = useState(false)
+  const [isLoadingStatistics, setIsLoadingStatistics] = useState(false)
+  const trpcClient = trpc.useContext().client
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    async function fetch() {
+      if (!loaded) {
+        setIsLoadingCourses(true)
+        setCourses(await trpcClient.query('courses.getAll'))
+        setIsLoadingCourses(false)
+
+        try {
+          setIsLoadingStatistics(true)
+          setUserAnswerStatistics(await trpcClient.query('userStatistics.get'))
+        } catch (e) {
+        } finally {
+          setIsLoadingStatistics(false)
+        }
+        setLoaded(true)
+      }
+    }
+    fetch()
+  }, [loaded, trpcClient, userAnswerStatistics])
+
+  // const { data: courses, isLoading: isLoadingCourses } = trpc.useQuery(
+  //   ['courses.getAll'],
+  //   { useErrorBoundary: true },
+  // )
+  // const { data: userAnswerStatistics, isLoading: isLoadingStatistics } =
+  //   trpc.useQuery(['userStatistics.get'], { useErrorBoundary: true })
 
   if (isLoadingCourses || isLoadingStatistics) {
     return (
@@ -23,25 +54,26 @@ function Student() {
     )
   }
 
-  if (!courses || !userAnswerStatistic)
+  function courseConclusionPercentage(
+    course: Course,
+    userAnswerStatistics: UserAnswerStatistic[],
+  ) {
+    return (
+      course.modules.filter((module) => {
+        return module.lessons.every((l) =>
+          userAnswerStatistics.map((u) => u.lessonId).includes(l.id),
+        )
+      }).length / course.modules.length
+    )
+  }
+
+  if (!courses) {
     return (
       <div className="absolute top-1/2 left-1/2 flex -translate-y-1/2 -translate-x-1/2 flex-col items-center justify-center">
         <span className="text-xl text-red-600">
           Ocorreu um erro ao carregar as informações, tente novamente
         </span>
       </div>
-    )
-
-  function courseConclusionPercentage(
-    course: Course,
-    userAnswerStatistic: UserAnswerStatistic[],
-  ) {
-    return (
-      course.modules.filter((module) => {
-        return module.lessons.every((l) =>
-          userAnswerStatistic.map((u) => u.lessonId).includes(l.id),
-        )
-      }).length / course.modules.length
     )
   }
 
@@ -63,7 +95,7 @@ function Student() {
                       className={`mr-2 h-6 w-6 ${
                         courseConclusionPercentage(
                           course,
-                          userAnswerStatistic,
+                          userAnswerStatistics || [],
                         ) === 1
                           ? 'text-green-500'
                           : ''
@@ -93,13 +125,13 @@ function Student() {
                         progress={
                           courseConclusionPercentage(
                             course,
-                            userAnswerStatistic,
+                            userAnswerStatistics || [],
                           ) * 100
                         }
                         className={
                           courseConclusionPercentage(
                             course,
-                            userAnswerStatistic,
+                            userAnswerStatistics || [],
                           ) === 1
                             ? 'bg-green-500'
                             : 'bg-blue-500'
