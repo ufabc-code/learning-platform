@@ -94,13 +94,13 @@ function Student() {
                             userAnswerStatistic,
                           ) * 100
                         }
-                        color={
+                        className={
                           courseConclusionPercentage(
                             course,
                             userAnswerStatistic,
                           ) === 1
-                            ? 'green-500'
-                            : 'blue-500'
+                            ? 'bg-green-500'
+                            : 'bg-blue-500'
                         }
                       />
                     </div>
