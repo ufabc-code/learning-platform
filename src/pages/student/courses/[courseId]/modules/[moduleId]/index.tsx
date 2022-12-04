@@ -24,10 +24,15 @@ function ModuleVisualizer() {
     savingAnswers,
     markQuestionAsSolved,
     markQuestionAsUnsolved,
+    error,
   } = useLessonStatistics({
     courseId: courseId,
     moduleId: moduleId,
   })
+
+  if (error) {
+    throw error
+  }
 
   if (!examRunning) {
     return (
