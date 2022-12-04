@@ -46,7 +46,7 @@ const test: Container = {
 
 const prod: Container = {
   courseRepository: new CourseRepositoryMongoDB(),
-  codeRunner: new FakeCodeRunner(),
+  codeRunner: new Judge0(),
   userAnswerStatisticRepository: new UserAnswerStatisticRepositoryMongoDB(),
   userRepository: new UserRepositoryMongoDB(),
   authProviders: {
