@@ -1,6 +1,4 @@
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-
-
+[![Coverage Status](https://coveralls.io/repos/github/ufabc-code/learning-platform/badge.svg?branch=main)](https://coveralls.io/github/ufabc-code/learning-platform?branch=main)
 
 # Instruções
 
@@ -42,7 +40,7 @@ Exemplo
 ```
 /api/users
 ```
-Como estamos utilizando TRPC, todo backend está exposto em ```/api/trpc/**```
+Como estamos utilizando tRPC, todo backend está exposto em ```/api/tRPC/**```
 
 
 ## Rotas
@@ -66,19 +64,19 @@ Todo e qualquer arquivo `*.tsx` dentro da pasta pages irá gerar uma nova rota, 
 
 ## Consumo de APIs
 
-Como utilizamos trpc, a interface do backend para o endpoint é inferida a ferramenta de consumo dessas apis dentro do frontend. A ferramenta utilizada pelo trpc é o [react-query](https://tanstack.com/query/v4), que expoe hooks e trás varias funcionalidades comuns para `fetching`, não sendo necessário se preocupar com states, retries, cache, refetching, etc.
+Como utilizamos tRPC, a interface do backend para o endpoint é inferida a ferramenta de consumo dessas apis dentro do frontend. A ferramenta utilizada pelo tRPC é o [react-query](https://tanstack.com/query/v4), que expoe hooks e trás varias funcionalidades comuns para `fetching`, não sendo necessário se preocupar com states, retries, cache, refetching, etc.
 
 Para realizar uma requisição get/post que não alteram dados, basta utilizar o hook
 
 ```javascript
-trpc.useQuery(['backendRoute.method'])
+tRPC.useQuery(['backendRoute.method'])
 ```
 o hook vai inciar a requisição assim que o componente for renderizado e vai devolver informações como `isLoading`, `isError` e `data`.
 
 Também é possível realizar a requisição de forma programática em ações de usuário, ao invés dela ser realizada quando a página é carregada.
 
 ```javascript
-const { client } = trpc.useContext()
+const { client } = tRPC.useContext()
 
 /* ... */
 
@@ -92,7 +90,7 @@ onClick = async () => {
 Para realizar requisições que realizam alterações de dados, utilize o hook
 
 ```javascript
-const { mutate } = trpc.useMutation('backendRoute.method')
+const { mutate } = tRPC.useMutation('backendRoute.method')
 ```
 
 O hook vai devolver a função mutate, além de outras utilidades, que pode ser invocado em, por exemplo, uma ação de usuário.
@@ -107,19 +105,33 @@ mutate({
 
 ## APIs Backend e Arquitetura
 
-Como o projeto se utiliza do trpc, é necessario definir um schema dos dados de entrada das funções, esse schema é construído com `zod`. As rotas são definidas a partir do router do trpc, que realiza um merge de todas as rotas de cada um dos serviços.
+Como o projeto se utiliza do tRPC, é necessario definir um schema dos dados de entrada das funções, esse schema é construído com `zod`. As rotas são definidas a partir do router do tRPC, que realiza um merge de todas as rotas de cada um dos serviços.
 
 As rotas e os schemas podem ser encontrados dentro da pasta `server/router/**`
 
-Em contrução...
+A arquitetura do backend é inspirada no modelo de clean architecture, sendo assim, (quase) nunca dependementos de classes concretas, utilizando de interfaces e realizando injeção de dependencia. Dessa forma o código fica mais simples de testar.
+
+As dependências das services são definidas no arquivo container.ts. Estas são injetadas em cada uma das factories das respectivas services, que estão na pasta `server/modules/**`. As services são disponibilizadas nas rotas do tRPC.
 
 ## Testes unitários
 
-Em construção...
+Utilizamos jest para realizar os testes do projeto.
+
+Pelo menos todas as services do projeto devem ser testadas, dessa forma, sempre que desenvolver uma nova funcionalidade será necessário cobrir os cenários esperados e de excessão de seu código.
+
+Para executar os testes integrados basta utilizar o comando:
+```bash
+npm run test
+```
 
 ## Testes integrados
 
-Em construção...
+Os testes integrados se utilizam de um banco em memória para realizar os testes backend e validar se as principais regras de negocio estão funcionando de maneira integrada entre todas as camadas projeto.
+
+Para executar os testes integrados basta utilizar o comando:
+```bash
+npm run test:integration
+```
 
 ## Padrões de commits
 
