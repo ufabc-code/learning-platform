@@ -47,10 +47,11 @@ export function QuizVisualizer({
 
   function handleNextQuestion() {
     if (correctAnswer) {
-      markQuestionAsSolved && markQuestionAsSolved()
+      markQuestionAsSolved?.()
     } else {
-      markQuestionAsUnsolved && markQuestionAsUnsolved()
+      markQuestionAsUnsolved?.()
     }
+    reset()
   }
 
   function reset() {

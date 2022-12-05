@@ -12,6 +12,9 @@ import IUserRepository from './repositories/iUserRepository'
 import CourseRepositoryJSON from './repositories/json/courseRepositoryJSON'
 import UserAnswerStatisticRepositoryJSON from './repositories/json/userAnswerStatisticRepositoryJSON'
 import UserRepositoryJSON from './repositories/json/userRepositoryJSON'
+import CourseRepositoryMongoDB from './repositories/mongodb/courseRepositoryMongoDB'
+import UserAnswerStatisticRepositoryMongoDB from './repositories/mongodb/userAnswerStatisticRepositoryMongoDB'
+import UserRepositoryMongoDB from './repositories/mongodb/userRepositoryMongoDB'
 
 interface Container {
   courseRepository: ICourseRepository
@@ -41,6 +44,16 @@ const test: Container = {
   },
 }
 
+const prod: Container = {
+  courseRepository: new CourseRepositoryMongoDB(),
+  codeRunner: new Judge0(),
+  userAnswerStatisticRepository: new UserAnswerStatisticRepositoryMongoDB(),
+  userRepository: new UserRepositoryMongoDB(),
+  authProviders: {
+    'fake-auth-provider': new FakeAuthProvider(),
+  },
+}
+
 export function container(): Container {
   const mode = process.env.MODE || 'dev'
 
@@ -49,6 +62,8 @@ export function container(): Container {
       return dev
     case 'test':
       return test
+    case 'prod':
+      return prod
     default:
       throw new Error('Invalid mode')
   }

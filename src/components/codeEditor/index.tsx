@@ -10,13 +10,18 @@ interface CodeEditorProps {
   className?: string
 }
 
+type CodeMirrorExtensions = Exclude<
+  Parameters<typeof CodeMirror>[0]['extensions'],
+  undefined
+>
+
 export default function CodeEditor({
   code,
   language,
   onchange,
   className,
 }: CodeEditorProps) {
-  const extensions: Record<string, any> = {
+  const extensions: Record<string, CodeMirrorExtensions[0]> = {
     javascript: javascript(),
     'c++': cpp(),
     python: python(),

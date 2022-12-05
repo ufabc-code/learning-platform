@@ -9,13 +9,22 @@ const useLessonStatistics = ({
   courseId,
   moduleId,
 }: UseLessonStatisticsProps) => {
-  const { data } = trpc.useQuery(['courses.get', { id: courseId }])
-  const { mutate: evaluateModule } = trpc.useMutation('evaluateModule.evaluate')
-  const { mutate: evaluateLesson } = trpc.useMutation('evaluateLesson.evaluate')
+  const { data } = trpc.useQuery(['courses.get', { id: courseId }], {
+    useErrorBoundary: true,
+  })
+  const { mutate: evaluateModule } = trpc.useMutation(
+    'evaluateModule.evaluate',
+    { useErrorBoundary: true },
+  )
+  const { mutate: evaluateLesson } = trpc.useMutation(
+    'evaluateLesson.evaluate',
+    { useErrorBoundary: true },
+  )
   const [lessons, setLessons] = useState<Lesson[]>([])
   const [examRunning, setExamRunning] = useState(false)
   const [numberOfLessons, setNumberOfLessons] = useState(0)
   const [savingAnswers, setSavingAnswers] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
   const trpcClient = trpc.useContext().client
 
   const getModuleId = useCallback(
@@ -69,25 +78,30 @@ const useLessonStatistics = ({
 
   useEffect(() => {
     async function fetchLessons() {
-      if (data && lessons.length === 0 && !examRunning) {
-        const { modules } = data
-        const lessons = modules.find(({ id }) => id === moduleId)?.lessons || []
+      try {
+        if (data && lessons.length === 0 && !examRunning) {
+          const { modules } = data
+          const lessons =
+            modules.find(({ id }) => id === moduleId)?.lessons || []
 
-        const lessonsToRemember = await trpcClient.query(
-          'lessonsToRemember.get',
-          {
-            courseId,
-          },
-        )
+          const lessonsToRemember = await trpcClient.query(
+            'lessonsToRemember.get',
+            {
+              courseId,
+            },
+          )
 
-        const lessonsToDo = [
-          ...getLessonsToRemember(lessonsToRemember, modules),
-          ...lessons,
-        ]
+          const lessonsToDo = [
+            ...getLessonsToRemember(lessonsToRemember, modules),
+            ...lessons,
+          ]
 
-        setLessons(lessonsToDo)
-        setNumberOfLessons(lessonsToDo.length)
-        setExamRunning(true)
+          setLessons(lessonsToDo)
+          setNumberOfLessons(lessonsToDo.length)
+          setExamRunning(true)
+        }
+      } catch (error) {
+        setError(error as Error)
       }
     }
     fetchLessons()
@@ -183,6 +197,7 @@ const useLessonStatistics = ({
     savingAnswers,
     markQuestionAsSolved,
     markQuestionAsUnsolved,
+    error,
   }
 }
 

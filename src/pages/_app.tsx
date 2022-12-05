@@ -5,8 +5,11 @@ import '../styles/globals.css'
 import { AppType } from 'next/app'
 import Head from 'next/head'
 import Header from 'components/header'
-import Container from 'components/container'
 import Footer from 'components/footer'
+import UserProvider from 'providers/user'
+import { useRouter } from 'next/router'
+import { ErrorBoundary } from 'react-error-boundary'
+import ErrorFallback from 'components/errorBoundary/errorFallback'
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const trpcClient = trpc.createClient({
@@ -18,27 +21,38 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       }
     },
   })
+
+  const router = useRouter()
+
+  const routesWithoutNavigation = [/\/student\/courses\/\S+\/modules\/\S+/]
+
+  const withoutNavigation = !!routesWithoutNavigation.find((regex) =>
+    regex.test(router.asPath),
+  )
+
   return (
-    <>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Learning Platform</title>
       </Head>
-      <ToastProvider>
-        <ToastSection />
-        <trpc.Provider client={trpcClient} queryClient={client}>
-          <QueryClientProvider client={client}>
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-grow">
-                <Component {...pageProps} />
-              </main>
-              <Footer />
-            </div>
-          </QueryClientProvider>
-        </trpc.Provider>
-      </ToastProvider>
-    </>
+      <UserProvider>
+        <ToastProvider>
+          <ToastSection />
+          <trpc.Provider client={trpcClient} queryClient={client}>
+            <QueryClientProvider client={client}>
+              <div className="flex min-h-screen flex-col">
+                {!withoutNavigation && <Header />}
+                <main className="flex-grow">
+                  <Component {...pageProps} />
+                </main>
+                {!withoutNavigation && <Footer />}
+              </div>
+            </QueryClientProvider>
+          </trpc.Provider>
+        </ToastProvider>
+      </UserProvider>
+    </ErrorBoundary>
   )
 }
 
