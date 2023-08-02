@@ -6,32 +6,13 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 
 const style = {
-  header: [
-    "bg-gray-900",
-    "py-2.5",
-  ].join(' '),
-  nav: [
-    "mx-auto",
-    "mx-20",
-    "flex",
-    "items-center",
-    "justify-evenly"
-  ].join(' '),
-  buttonWrapper: [
-  ].join(' '),
+  header: ['bg-gray-900', 'py-2.5'].join(' '),
+  nav: ['mx-auto', 'mx-20', 'flex', 'items-center', 'justify-around'].join(' '),
+  buttonWrapper: [].join(' '),
   button: [].join(' '),
-  logo: [
-    "h-10",
-    "w-auto"
-  ].join(' '),
-  linksList: [
-    "flex",
-    "list-none",
-    "justify-evenly",
-  ].join(' '),
-  link: [
-    "text-white"
-  ].join(' ')
+  logo: ['h-10', 'w-auto'].join(' '),
+  linksList: ['flex', 'list-none', 'justify-evenly'].join(' '),
+  link: ['text-white'].join(' '),
 }
 
 const routes = [
@@ -51,7 +32,7 @@ const Header = () => {
       <nav className={style.nav}>
         <Link href="/">
           <a>
-            <img className={style.logo} src={"/grub_logo.png"} />
+            <img className={style.logo} src={'/grub_logo.png'} />
           </a>
         </Link>
 
@@ -62,9 +43,7 @@ const Header = () => {
               key={route.path}
               active={pathname.startsWith(route.path)}
             >
-              <span className={style.link}>
-                {route.name}
-              </span>
+              <span className={style.link}>{route.name}</span>
             </Navbar.Link>
           ))}
         </ul>
@@ -83,7 +62,7 @@ const Header = () => {
           )}
         </div>
       </nav>
-    </header >
+    </header>
   )
 }
 
