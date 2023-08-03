@@ -12,7 +12,7 @@ const style = {
   buttonWrapper: [].join(' '),
   button: [].join(' '),
   logo: ['h-10', 'w-auto'].join(' '),
-  linksList: ['flex', 'list-none', 'justify-evenly'].join(' '),
+  linksList: ['flex', 'list-none', 'justify-evenly', 'gap-10'].join(' '),
   link: ['text-white'].join(' '),
 }
 
@@ -20,6 +20,10 @@ const routes = [
   {
     name: 'Cursos',
     path: '/student',
+  },
+  {
+    name: 'Ambiente de programação',
+    path: '/programming',
   },
 ]
 

@@ -275,9 +275,8 @@ export function CodeVisualizer({
 
         {debug && correctAnswer !== undefined && (
           <span
-            className={`block rounded-lg px-5 py-2.5 text-center text-sm font-medium ${
-              correctAnswer ? 'text-green-700' : 'text-red-700'
-            }`}
+            className={`block rounded-lg px-5 py-2.5 text-center text-sm font-medium ${correctAnswer ? 'text-green-700' : 'text-red-700'
+              }`}
           >
             {correctAnswer ? 'Resposta correta' : 'Resposta incorreta'}
           </span>
