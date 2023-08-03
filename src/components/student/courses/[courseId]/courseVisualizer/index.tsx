@@ -61,13 +61,13 @@ export default function CourseVisualizer({
 
   return (
     <Container>
-      <div className="my-auto flex text-3xl font-semibold dark:text-white">
+      <div className="mt-10 justify-center my-auto flex text-4xl font-semibold dark:text-white">
         {course.title}
       </div>
-      <div className="my-auto flex text-base font-normal dark:text-white">
+      <div className="mt-3 mb-10 flex justify-center text-base font-normal dark:text-white">
         {course.description}
       </div>
-      <div className="my-auto flex text-2xl font-semibold leading-loose dark:text-white">
+      <div className="mb-3 flex text-2xl font-semibold leading-loose dark:text-white">
         Módulos
       </div>
       <Accordion alwaysOpen={true}>
@@ -75,9 +75,8 @@ export default function CourseVisualizer({
           <Accordion.Panel key={module.id}>
             <Accordion.Title>
               <span className="flex items-center">
-                <>
-                  {isModuleCompletedIcon(module)} {module.title}
-                </>
+                {isModuleCompletedIcon(module)}
+                <span className="ml-2">{module.title}</span>
               </span>
             </Accordion.Title>
             <Accordion.Content>
@@ -93,19 +92,6 @@ export default function CourseVisualizer({
                   }
                 >
                   Ir para este módulo
-                  <svg
-                    aria-hidden="true"
-                    className="ml-2 -mr-1 h-5 w-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
                 </button>
               </span>
             </Accordion.Content>

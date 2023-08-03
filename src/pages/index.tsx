@@ -6,7 +6,7 @@ import { Button } from 'flowbite-react'
 
 const Home: NextPage = () => {
   return (
-    <div className="h-full pt-12">
+    <div className="h-full align-center">
       <Container>
         <section>
           <div className="flex justify-center">

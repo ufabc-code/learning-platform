@@ -18,6 +18,16 @@ function Student() {
   const trpcClient = trpc.useContext().client
   const [loaded, setLoaded] = useState(false)
 
+  function percentageBackgroundColor(course: Course): string {
+    const conclusionPercentage = courseConclusionPercentage(
+      course,
+      userAnswerStatistics || [],
+    )
+    if (conclusionPercentage >= 1) return 'bg-green-500'
+    if (conclusionPercentage > 0) return 'bg-blue-500'
+    return 'bg-gray-500'
+  }
+
   useEffect(() => {
     async function fetch() {
       if (!loaded) {
@@ -79,9 +89,9 @@ function Student() {
 
   return (
     <Container>
-      <section className="w-4/5">
-        <h1 className="mt-6 mb-10 text-2xl font-bold leading-none">Cursos</h1>
-        <ul className="grid grid-cols-2 gap-4 text-gray-500">
+      <h1 className="text-3xl font-bold my-5">Cursos</h1>
+      <section className="w-full my-4">
+        <ul className="grid grid-cols-4 gap-4">
           {courses.map((course) => (
             <li key={course.id}>
               <Link
@@ -89,54 +99,33 @@ function Student() {
                 passHref
                 legacyBehavior
               >
-                <a className="flex h-full w-full flex-col rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:bg-gray-100">
-                  <h5 className="mb-2 flex items-center text-2xl font-bold tracking-tight text-gray-900">
-                    <svg
-                      className={`mr-2 h-6 w-6 ${
-                        courseConclusionPercentage(
-                          course,
-                          userAnswerStatistics || [],
-                        ) === 1
-                          ? 'text-green-500'
-                          : ''
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                      <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                      ></path>
-                    </svg>
-                    {course.title}
-                  </h5>
-                  <div className="mt-auto">
-                    <p className="font-normal text-gray-700">
-                      {course.description}
-                    </p>
-                    <div className="mt-4">
-                      <ProgressBar
-                        progress={
-                          courseConclusionPercentage(
-                            course,
-                            userAnswerStatistics || [],
-                          ) * 100
-                        }
-                        className={
-                          courseConclusionPercentage(
-                            course,
-                            userAnswerStatistics || [],
-                          ) === 1
-                            ? 'bg-green-500'
-                            : 'bg-blue-500'
-                        }
-                      />
+                <a>
+                  <div className="flex flex-col rounded-lg border border-gray-100 bg-white shadow-md hover:bg-gray-100">
+                    <div
+                      className={
+                        percentageBackgroundColor(course) + ' h-8 w-full'
+                      }
+                    ></div>
+                    <div className="m-4">
+                      <h5 className="mb-2 flex items-center text-2xl font-bold tracking-tight text-gray-900">
+                        {course.title}
+                      </h5>
+                      <div className="mt-auto">
+                        <p className="font-normal text-gray-700">
+                          {course.description}
+                        </p>
+                        <div className="mt-4">
+                          <ProgressBar
+                            progress={
+                              courseConclusionPercentage(
+                                course,
+                                userAnswerStatistics || [],
+                              ) * 100
+                            }
+                            className={percentageBackgroundColor(course)}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </a>

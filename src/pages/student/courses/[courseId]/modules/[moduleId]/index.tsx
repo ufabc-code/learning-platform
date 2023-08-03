@@ -7,6 +7,8 @@ import QuizLesson from 'server/entities/quizLesson'
 import { QuizVisualizer } from 'components/lessonVisualizer/quizVisualizer'
 import { CodeVisualizer } from 'components/lessonVisualizer/codeVisualizer'
 import Spinner from 'components/spinner'
+import Container from 'components/container'
+import Header from 'components/header'
 
 function ModuleVisualizer() {
   const router = useRouter()
@@ -63,31 +65,36 @@ function ModuleVisualizer() {
   }
 
   return (
-    <div className="p-8">
-      <ProgressBar
-        progress={Math.floor(
-          ((numberOfLessons - remainingLessons) / numberOfLessons) * 100,
-        )}
-      />
-      <div>
-        {lessonToDo.type === 'code' && (
-          <CodeVisualizer
-            codeLesson={lessonToDo as CodeLesson}
-            handleEvaluateAnswer={handleEvaluateCodeAnswer}
-            markQuestionAsSolved={markQuestionAsSolved}
-            markQuestionAsUnsolved={markQuestionAsUnsolved}
+    <>
+      <Header />
+      <Container>
+        <div className="p-8">
+          <ProgressBar
+            progress={Math.floor(
+              ((numberOfLessons - remainingLessons) / numberOfLessons) * 100,
+            )}
           />
-        )}
-        {lessonToDo.type === 'quiz' && (
-          <QuizVisualizer
-            quizLesson={lessonToDo as QuizLesson}
-            handleEvaluateAnswer={handleEvaluateQuizAnswer}
-            markQuestionAsSolved={markQuestionAsSolved}
-            markQuestionAsUnsolved={markQuestionAsUnsolved}
-          />
-        )}
-      </div>
-    </div>
+          <div>
+            {lessonToDo.type === 'code' && (
+              <CodeVisualizer
+                codeLesson={lessonToDo as CodeLesson}
+                handleEvaluateAnswer={handleEvaluateCodeAnswer}
+                markQuestionAsSolved={markQuestionAsSolved}
+                markQuestionAsUnsolved={markQuestionAsUnsolved}
+              />
+            )}
+            {lessonToDo.type === 'quiz' && (
+              <QuizVisualizer
+                quizLesson={lessonToDo as QuizLesson}
+                handleEvaluateAnswer={handleEvaluateQuizAnswer}
+                markQuestionAsSolved={markQuestionAsSolved}
+                markQuestionAsUnsolved={markQuestionAsUnsolved}
+              />
+            )}
+          </div>
+        </div>
+      </Container>
+    </>
   )
 }
 
