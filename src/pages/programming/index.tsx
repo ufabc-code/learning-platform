@@ -1,7 +1,8 @@
 import { PlayIcon } from '@heroicons/react/24/outline'
 import CodeEditor from 'components/codeEditor'
 import Spinner from 'components/spinner'
-import { useState } from 'react'
+import { icons, useToast } from 'components/toast'
+import { useEffect, useState } from 'react'
 import {
   CodeRunnerStatus,
   ICodeRunnerResult,
@@ -10,16 +11,20 @@ import { trpc } from 'utils/trpc'
 
 function Programming() {
   const languages = ['c++', 'javascript', 'python']
+  const keyBindings = ['vim', 'emacs']
   const [language, setLanguage] = useState('')
+  const [keyBinding, setKeyBinding] = useState('')
   const [codeRunning, setCodeRunning] = useState(false)
+  const [keyDown, setKeyDown] = useState(false)
   const [code, setCode] = useState('')
   const [stdin, setStdin] = useState('')
-
   const [result, setResult] = useState<ICodeRunnerResult>({
     status: CodeRunnerStatus.OK,
     output: '',
     stderr: '',
   })
+
+  const { addToast } = useToast()
 
   async function runCode({
     code,
@@ -42,9 +47,24 @@ function Programming() {
   }
 
   async function handleRunCode() {
-    setCodeRunning(true)
-    setResult(await runCode({ code, language, input: stdin }))
-    setCodeRunning(false)
+    //TODO: Trocar esse try catch para onError, onSuccess
+    try {
+      setCodeRunning(true)
+      const result = await runCode({ code, language, input: stdin })
+      setResult(result)
+      setCodeRunning(false)
+    } catch (e) {
+      setCodeRunning(false)
+      let errorMessage = 'Erro ao executar'
+      if (code.length === 0) errorMessage = 'Código não pode ser vazio'
+      else if (!language || languages.includes(language))
+        errorMessage = 'Selecione a linguagem'
+
+      addToast({
+        message: errorMessage,
+        icon: icons.error,
+      })
+    }
   }
 
   return (
@@ -52,6 +72,7 @@ function Programming() {
       <div className="flex flex-row">
         <CodeEditor
           code={code}
+          keyBinding={keyBinding}
           language={language}
           onchange={(code) => {
             setCode(code)
@@ -74,6 +95,22 @@ function Programming() {
               </option>
             ))}
           </select>
+          <select
+            id="keyBinding"
+            className="mt-1 w-full h-fit rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900"
+            value={keyBinding}
+            onChange={(e) => {
+              setKeyBinding(e.target.value)
+            }}
+          >
+            <option value={''}>Key binding</option>
+            {keyBindings.map((keyBinding, index) => (
+              <option key={index} value={keyBinding}>
+                {keyBinding}
+              </option>
+            ))}
+          </select>
+
           <button
             onClick={() => handleRunCode()}
             className={`mt-1 w-full h-fit flex text-white font-bold items-center rounded-lg bg-green-500 py-2 px-4 ${codeRunning

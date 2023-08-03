@@ -2,12 +2,15 @@ import CodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { cpp } from '@codemirror/lang-cpp'
 import { python } from '@codemirror/lang-python'
+import { vim } from '@replit/codemirror-vim'
+import { emacs } from '@replit/codemirror-emacs'
 
 interface CodeEditorProps {
   code: string
   language: string
   onchange?: (code: string) => void
   className?: string
+  keyBinding?: string
 }
 
 type CodeMirrorExtensions = Exclude<
@@ -20,21 +23,35 @@ export default function CodeEditor({
   language,
   onchange,
   className,
+  keyBinding,
 }: CodeEditorProps) {
-  const extensions: Record<string, CodeMirrorExtensions[0]> = {
+  console.log('render code editor')
+  const languageExtensions: Record<string, CodeMirrorExtensions[0]> = {
     javascript: javascript(),
     'c++': cpp(),
     python: python(),
   }
+  const keyBindingExtensions: Record<string, CodeMirrorExtensions[0]> = {
+    vim: vim(),
+    emacs: emacs(),
+  }
 
-  const languageExtension = extensions[language]
+  const languageExtension = languageExtensions[language]
+  const keyBindingExtension = keyBindingExtensions[keyBinding ?? '']
+
+  function extensions(): any[] {
+    const extensions: any[] = []
+    if (keyBindingExtension) extensions.push([keyBindingExtension])
+    if (languageExtension) extensions.push([languageExtension])
+    return extensions
+  }
 
   return (
     <CodeMirror
       value={code}
       height="100%"
       className={`h-32 ${className}`}
-      extensions={languageExtension ? [languageExtension] : []}
+      extensions={extensions()}
       onChange={(value) => {
         onchange && onchange(value)
       }}
